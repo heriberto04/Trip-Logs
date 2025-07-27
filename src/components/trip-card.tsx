@@ -76,39 +76,41 @@ export function TripCard({ trip, onEdit }: TripCardProps) {
           </DropdownMenu>
         </CardHeader>
         <Separator />
-        <CardContent className="p-2 grid grid-cols-3 gap-x-2 text-sm">
-          {/* Column 1 */}
-          <div className="space-y-1">
-            <div className="flex justify-between">
-                <div>
-                    <p className="text-muted-foreground text-xs">Duration</p>
-                    <p className="font-semibold text-base">{durationFormatted}</p>
+        <CardContent className="p-2 text-sm">
+            <div className="grid grid-cols-3 gap-x-2">
+                {/* Column 1 */}
+                <div className="space-y-1">
+                    <div>
+                        <p className="text-muted-foreground text-xs">Duration</p>
+                        <p className="font-semibold text-base">{durationFormatted}</p>
+                    </div>
+                    <div>
+                        <p className="text-muted-foreground text-xs">{settings.unit === 'miles' ? 'Miles' : 'Kilometers'}</p>
+                        <p className="font-semibold text-base">{trip.miles}</p>
+                    </div>
                 </div>
-                <div className="text-right">
-                    <p className="text-muted-foreground text-xs">{settings.unit === 'miles' ? 'Miles' : 'Kilometers'}</p>
-                    <p className="font-semibold text-base">{trip.miles}</p>
+                {/* Column 2 */}
+                <div className="space-y-1">
+                    <div>
+                        <p className="text-muted-foreground text-xs">Gross</p>
+                        <p className="font-semibold text-base text-green-500">{formatCurrency(trip.grossEarnings, settings.currency)}</p>
+                    </div>
+                    <div>
+                        <p className="text-muted-foreground text-xs">Expenses</p>
+                        <p className="font-semibold text-base text-red-500">{formatCurrency(totalExpenses, settings.currency)}</p>
+                    </div>
+                </div>
+                {/* Column 3 */}
+                <div className="space-y-1 text-right">
+                    <div>
+                        <p className="text-muted-foreground text-xs">Deduction</p>
+                        <p className="font-semibold text-base">{formatCurrency(deductions, settings.currency)}</p>
+                    </div>
                 </div>
             </div>
-            <div>
-              <p className="text-muted-foreground text-xs">Deduction</p>
-              <p className="font-semibold text-base">{formatCurrency(deductions, settings.currency)}</p>
-            </div>
-          </div>
-          {/* Column 2 */}
-          <div className="space-y-1">
-            <div>
-              <p className="text-muted-foreground text-xs">Gross</p>
-              <p className="font-semibold text-base text-green-500">{formatCurrency(trip.grossEarnings, settings.currency)}</p>
-            </div>
-            <div>
-              <p className="text-muted-foreground text-xs">Expenses</p>
-              <p className="font-semibold text-base text-red-500">{formatCurrency(totalExpenses, settings.currency)}</p>
-            </div>
-          </div>
-          {/* Column 3 */}
-          <div className="space-y-1 text-right">
-            <div>
-                <p className="text-muted-foreground text-xs">Net</p>
+            <Separator className="my-2"/>
+            <div className="flex justify-between items-center">
+                <p className="font-bold text-lg">Net</p>
                 <p className={cn(
                     "font-bold text-lg",
                     net >= 0 ? 'text-green-400' : 'text-red-400'
@@ -116,7 +118,6 @@ export function TripCard({ trip, onEdit }: TripCardProps) {
                     {formatCurrency(net, settings.currency)}
                 </p>
             </div>
-          </div>
         </CardContent>
       </Card>
 
@@ -137,3 +138,4 @@ export function TripCard({ trip, onEdit }: TripCardProps) {
     </>
   );
 }
+
