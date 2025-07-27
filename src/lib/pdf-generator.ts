@@ -43,7 +43,6 @@ export function generatePdf(
 
   // Summary
   const summaryData = trips.reduce((acc, trip) => {
-      const durationMinutes = calculateDuration(trip.startTime, trip.endTime);
       const totalExpenses = trip.expenses.gasoline + trip.expenses.tolls + trip.expenses.food;
       acc.totalMiles += trip.miles;
       acc.grossEarnings += trip.grossEarnings;
@@ -72,7 +71,6 @@ export function generatePdf(
   // Trip Details Table
   const tableBody = trips.map(trip => {
     const duration = calculateDuration(trip.startTime, trip.endTime);
-    const expenses = trip.expenses.gasoline + trip.expenses.tolls + trip.expenses.food;
     const vehicle = vehicles.find(v => v.id === trip.vehicleId);
     const tripDate = new Date(trip.date);
     const formattedDate = format(new Date(tripDate.getTime() + tripDate.getTimezoneOffset() * 60000), 'yyyy-MM-dd');
@@ -83,7 +81,9 @@ export function generatePdf(
       `${Math.floor(duration / 60)}h ${duration % 60}m`,
       trip.miles,
       formatCurrency(trip.grossEarnings, settings.currency),
-      formatCurrency(expenses, settings.currency),
+      formatCurrency(trip.expenses.gasoline, settings.currency),
+      formatCurrency(trip.expenses.tolls, settings.currency),
+      formatCurrency(trip.expenses.food, settings.currency),
       vehicle ? `${vehicle.make} ${vehicle.model}` : 'N/A',
     ];
   });
@@ -94,7 +94,7 @@ export function generatePdf(
   doc.text('Trip Log', 14, finalY + 15);
   doc.autoTable({
     startY: finalY + 20,
-    head: [['Date', 'Duration', 'Distance', 'Gross', 'Expenses', 'Vehicle']],
+    head: [['Date', 'Duration', 'Distance', 'Gross', 'Gasoline', 'Tolls', 'Food', 'Vehicle']],
     body: tableBody,
     theme: 'grid',
   });
