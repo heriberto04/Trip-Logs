@@ -90,8 +90,8 @@ export function TripCard({ trip, onView, onEdit }: TripCardProps) {
                         <p className="font-semibold text-base">{durationFormatted}</p>
                     </div>
                      <div>
-                        <p className="text-muted-foreground text-xs">Miles</p>
-                        <p className="font-semibold text-base">{trip.miles}</p>
+                        <p className="text-muted-foreground text-xs">Gross</p>
+                        <p className="font-semibold text-base text-green-500">{formatCurrency(trip.grossEarnings, settings.currency)}</p>
                     </div>
                 </div>
                 {/* Column 2 */}
@@ -108,8 +108,8 @@ export function TripCard({ trip, onView, onEdit }: TripCardProps) {
                 {/* Column 3 */}
                 <div className="space-y-1 text-left">
                    <div>
-                        <p className="text-muted-foreground text-xs">Gross</p>
-                        <p className="font-semibold text-base text-green-500">{formatCurrency(trip.grossEarnings, settings.currency)}</p>
+                        <p className="text-muted-foreground text-xs">Miles</p>
+                        <p className="font-semibold text-base">{trip.miles}</p>
                     </div>
                     <div>
                         <p className="text-muted-foreground text-xs">Net</p>
