@@ -21,6 +21,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { Separator } from '@/components/ui/separator';
 
 
 interface TripCardProps {
@@ -54,8 +55,8 @@ export function TripCard({ trip, onEdit }: TripCardProps) {
   return (
     <>
       <Card className="overflow-hidden transition-all duration-300 ease-in-out">
-        <CardHeader className="flex flex-row items-center justify-between p-2 bg-card">
-          <CardTitle className="text-base font-headline">{formattedDate}</CardTitle>
+        <CardHeader className="flex flex-row items-center justify-between p-3 bg-card">
+          <CardTitle className="text-lg font-headline">{formattedDate}</CardTitle>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="h-8 w-8">
@@ -74,6 +75,7 @@ export function TripCard({ trip, onEdit }: TripCardProps) {
             </DropdownMenuContent>
           </DropdownMenu>
         </CardHeader>
+        <Separator />
         <CardContent className="p-3 grid grid-cols-3 gap-x-2 text-sm">
           {/* Column 1 */}
           <div className="space-y-2">
