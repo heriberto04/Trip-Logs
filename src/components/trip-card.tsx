@@ -81,56 +81,34 @@ export function TripCard({ trip, onView, onEdit }: TripCardProps) {
           </DropdownMenu>
         </CardHeader>
         <Separator />
-        <CardContent className="p-2 text-sm">
-            <div className="grid grid-cols-4 gap-x-2 text-center">
-                {/* Column 1 */}
-                <div className="space-y-1 text-left">
-                    <div>
-                        <p className="text-muted-foreground text-xs">Duration</p>
-                        <p className="font-semibold text-base">{durationFormatted}</p>
-                    </div>
-                     <div>
-                        <p className="text-muted-foreground text-xs">Expenses</p>
-                        <p className="font-semibold text-base text-red-500">{formatCurrency(totalExpenses, settings.currency)}</p>
-                    </div>
+        <CardContent className="p-3 text-sm">
+            <div className="grid grid-cols-3 gap-x-4 gap-y-2 text-left">
+                {/* Top Row */}
+                <div>
+                    <p className="text-muted-foreground text-xs">Duration</p>
+                    <p className="font-semibold text-base">{durationFormatted}</p>
                 </div>
-                {/* Column 2 */}
-                <div className="space-y-1 text-left">
-                     <div>
-                        <p className="text-muted-foreground text-xs">Deduction</p>
-                        <p className="font-semibold text-base">{formatCurrency(deductions, settings.currency)}</p>
-                    </div>
-                    <div>
-                        <p className="text-muted-foreground text-xs">Miles</p>
-                        <p className="font-semibold text-base">{trip.miles}</p>
-                    </div>
+                <div>
+                    <p className="text-muted-foreground text-xs">Miles</p>
+                    <p className="font-semibold text-base">{trip.miles}</p>
                 </div>
-                {/* Column 3 */}
-                <div className="space-y-1 text-left">
-                   <div>
-                        <p className="text-muted-foreground text-xs">Gross</p>
-                        <p className={cn(
-                            "font-semibold text-base text-green-500"
-                        )}>
-                            {formatCurrency(trip.grossEarnings, settings.currency)}
-                        </p>
-                    </div>
-                    <div>
-                        <p className="text-muted-foreground text-xs">Net</p>
-                        <p className={cn(
-                            "font-semibold text-base",
-                            net >= 0 ? 'text-green-400' : 'text-red-400'
-                        )}>
-                            {formatCurrency(net, settings.currency)}
-                        </p>
-                    </div>
+                <div>
+                    <p className="text-muted-foreground text-xs">Deduction</p>
+                    <p className="font-semibold text-base">{formatCurrency(deductions, settings.currency)}</p>
                 </div>
-                 {/* Column 4 */}
-                 <div className="space-y-1 text-right">
-                   <div>
-                        <p className="text-muted-foreground text-xs">$/hour</p>
-                        <p className="font-semibold text-base">{formatCurrency(hourlyRate, settings.currency)}</p>
-                    </div>
+
+                {/* Bottom Row */}
+                <div>
+                    <p className="text-muted-foreground text-xs">Gross</p>
+                    <p className="font-semibold text-base text-green-500">{formatCurrency(trip.grossEarnings, settings.currency)}</p>
+                </div>
+                <div>
+                    <p className="text-muted-foreground text-xs">Expenses</p>
+                    <p className="font-semibold text-base text-red-500">{formatCurrency(totalExpenses, settings.currency)}</p>
+                </div>
+                <div>
+                    <p className="text-muted-foreground text-xs">$/hour</p>
+                    <p className="font-semibold text-base">{formatCurrency(hourlyRate, settings.currency)}</p>
                 </div>
             </div>
         </CardContent>
