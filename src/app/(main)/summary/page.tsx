@@ -86,7 +86,7 @@ export default function SummaryPage() {
         <SummaryCard 
           title="Total Net" 
           value={formatCurrency(totalNet, settings.currency)} 
-          valueColor={net >= 0 ? 'text-green-400' : 'text-red-400'}
+          valueColor={totalNet >= 0 ? 'text-green-400' : 'text-red-400'}
           className="col-span-2"
           isLarge
         />
