@@ -69,9 +69,17 @@ export function AddTripSheet({ isOpen, setIsOpen, trip }: AddTripSheetProps) {
         vehicleId: trip.vehicleId,
       });
     } else {
-      form.reset();
+      form.reset({
+        date: new Date(),
+        startTime: '',
+        endTime: '',
+        miles: 0,
+        grossEarnings: 0,
+        expenses: { gasoline: 0, tolls: 0, food: 0 },
+        vehicleId: vehicles.length > 0 ? vehicles[0].id : null,
+      });
     }
-  }, [trip, form, isOpen]);
+  }, [trip, form, isOpen, vehicles]);
 
 
   const onSubmit = (data: TripFormData) => {
@@ -90,7 +98,7 @@ export function AddTripSheet({ isOpen, setIsOpen, trip }: AddTripSheetProps) {
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
-      <SheetContent className="overflow-y-auto">
+      <SheetContent className="overflow-y-auto w-full sm:max-w-sm">
         <SheetHeader>
           <SheetTitle>{trip ? 'Edit Trip' : 'Add New Trip'}</SheetTitle>
           <SheetDescription>
@@ -169,7 +177,7 @@ export function AddTripSheet({ isOpen, setIsOpen, trip }: AddTripSheetProps) {
               name="vehicleId"
               control={form.control}
               render={({ field }) => (
-                <Select onValueChange={field.onChange} defaultValue={field.value ?? undefined}>
+                <Select onValueChange={field.onChange} value={field.value ?? undefined}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select a vehicle" />
                   </SelectTrigger>

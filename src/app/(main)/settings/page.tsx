@@ -67,7 +67,7 @@ export default function SettingsPage() {
               <Label htmlFor="address">Address</Label>
               <Textarea id="address" value={userInfo.address} onChange={e => setUserInfo(prev => ({...prev, address: e.target.value}))} />
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="cityState">City/State</Label>
                 <Input id="cityState" value={userInfo.cityState} onChange={e => setUserInfo(prev => ({...prev, cityState: e.target.value}))} />

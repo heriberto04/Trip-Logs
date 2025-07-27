@@ -73,7 +73,7 @@ export function TripCard({ trip, onEdit }: TripCardProps) {
             </DropdownMenuContent>
           </DropdownMenu>
         </CardHeader>
-        <CardContent className="p-4 grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+        <CardContent className="p-4 grid grid-cols-2 gap-4 text-sm">
           <div>
             <p className="text-muted-foreground">Duration</p>
             <p className="font-semibold">{durationFormatted}</p>

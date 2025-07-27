@@ -77,7 +77,7 @@ export default function SummaryPage() {
         </TabsList>
       </Tabs>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <SummaryCard title="Driving Time" value={formattedDrivingTime} />
         <SummaryCard title={`Total ${settings.unit === 'miles' ? 'Miles' : 'Kilometers'}`} value={summaryData.totalMiles.toFixed(1)} />
         <SummaryCard title="Gross Earnings" value={formatCurrency(summaryData.grossEarnings, settings.currency)} valueColor="text-green-500" />
@@ -88,7 +88,7 @@ export default function SummaryPage() {
           title="Total Net" 
           value={formatCurrency(totalNet, settings.currency)} 
           valueColor={totalNet >= 0 ? 'text-green-400' : 'text-red-400'}
-          className="col-span-2"
+          className="col-span-1 sm:col-span-2"
           isLarge
         />
       </div>

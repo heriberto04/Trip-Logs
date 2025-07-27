@@ -3,8 +3,9 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Plus, AreaChart, Archive, Settings } from 'lucide-react';
+import { Trip, History, Summary, Settings } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Plus, AreaChart, Archive } from 'lucide-react';
 
 const navItems = [
   { href: '/trips', icon: Plus, label: 'Trips' },
