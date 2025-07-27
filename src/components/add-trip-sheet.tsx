@@ -28,12 +28,12 @@ const tripSchema = z.object({
   date: z.date({ required_error: "A date is required." }),
   startTime: z.string().min(1, 'Start time is required'),
   endTime: z.string().min(1, 'End time is required'),
-  miles: z.coerce.number().min(0).optional().default(0),
-  grossEarnings: z.coerce.number().min(0).optional().default(0),
+  miles: z.coerce.number().min(0).optional(),
+  grossEarnings: z.coerce.number().min(0).optional(),
   expenses: z.object({
-    gasoline: z.coerce.number().min(0).optional().default(0),
-    tolls: z.coerce.number().min(0).optional().default(0),
-    food: z.coerce.number().min(0).optional().default(0),
+    gasoline: z.coerce.number().min(0).optional(),
+    tolls: z.coerce.number().min(0).optional(),
+    food: z.coerce.number().min(0).optional(),
   }),
   vehicleId: z.string().nullable().optional(),
 });
@@ -50,9 +50,9 @@ export function AddTripSheet({ isOpen, setIsOpen, trip }: AddTripSheetProps) {
       date: new Date(),
       startTime: '',
       endTime: '',
-      miles: 0,
-      grossEarnings: 0,
-      expenses: { gasoline: 0, tolls: 0, food: 0 },
+      miles: undefined,
+      grossEarnings: undefined,
+      expenses: { gasoline: undefined, tolls: undefined, food: undefined },
       vehicleId: null,
     },
   });
@@ -63,9 +63,13 @@ export function AddTripSheet({ isOpen, setIsOpen, trip }: AddTripSheetProps) {
         date: new Date(trip.date),
         startTime: trip.startTime,
         endTime: trip.endTime,
-        miles: trip.miles,
-        grossEarnings: trip.grossEarnings,
-        expenses: trip.expenses,
+        miles: trip.miles || undefined,
+        grossEarnings: trip.grossEarnings || undefined,
+        expenses: {
+            gasoline: trip.expenses.gasoline || undefined,
+            tolls: trip.expenses.tolls || undefined,
+            food: trip.expenses.food || undefined,
+        },
         vehicleId: trip.vehicleId,
       });
     } else {
@@ -73,9 +77,9 @@ export function AddTripSheet({ isOpen, setIsOpen, trip }: AddTripSheetProps) {
         date: new Date(),
         startTime: '',
         endTime: '',
-        miles: 0,
-        grossEarnings: 0,
-        expenses: { gasoline: 0, tolls: 0, food: 0 },
+        miles: undefined,
+        grossEarnings: undefined,
+        expenses: { gasoline: undefined, tolls: undefined, food: undefined },
         vehicleId: vehicles.length > 0 ? vehicles[0].id : null,
       });
     }
@@ -86,6 +90,13 @@ export function AddTripSheet({ isOpen, setIsOpen, trip }: AddTripSheetProps) {
     const tripData = {
       ...data,
       date: format(data.date, 'yyyy-MM-dd'),
+      miles: data.miles || 0,
+      grossEarnings: data.grossEarnings || 0,
+      expenses: {
+          gasoline: data.expenses.gasoline || 0,
+          tolls: data.expenses.tolls || 0,
+          food: data.expenses.food || 0,
+      }
     };
     if (trip) {
       updateTrip({ ...trip, ...tripData });
@@ -154,12 +165,12 @@ export function AddTripSheet({ isOpen, setIsOpen, trip }: AddTripSheetProps) {
           
           <div className="space-y-2">
             <Label htmlFor="miles">Miles</Label>
-            <Input id="miles" type="number" step="0.1" {...form.register('miles')} />
+            <Input id="miles" type="number" step="0.1" placeholder="0" {...form.register('miles')} />
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="grossEarnings">Gross Earnings</Label>
-            <Input id="grossEarnings" type="number" step="0.01" {...form.register('grossEarnings')} />
+            <Input id="grossEarnings" type="number" step="0.01" placeholder="0" {...form.register('grossEarnings')} />
           </div>
 
           <div className="space-y-2">
@@ -167,15 +178,15 @@ export function AddTripSheet({ isOpen, setIsOpen, trip }: AddTripSheetProps) {
             <div className="grid grid-cols-3 gap-2">
                 <div className="space-y-1">
                     <Label htmlFor="gasoline" className="text-xs">Gasoline</Label>
-                    <Input id="gasoline" type="number" step="0.01" {...form.register('expenses.gasoline')} />
+                    <Input id="gasoline" type="number" step="0.01" placeholder="0" {...form.register('expenses.gasoline')} />
                 </div>
                 <div className="space-y-1">
                     <Label htmlFor="tolls" className="text-xs">Tolls</Label>
-                    <Input id="tolls" type="number" step="0.01" {...form.register('expenses.tolls')} />
+                    <Input id="tolls" type="number" step="0.01" placeholder="0" {...form.register('expenses.tolls')} />
                 </div>
                 <div className="space-y-1">
                     <Label htmlFor="food" className="text-xs">Food</Label>
-                    <Input id="food" type="number" step="0.01" {...form.register('expenses.food')} />
+                    <Input id="food" type="number" step="0.01" placeholder="0" {...form.register('expenses.food')} />
                 </div>
             </div>
           </div>
