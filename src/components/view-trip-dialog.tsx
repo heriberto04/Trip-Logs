@@ -86,16 +86,8 @@ export function ViewTripDialog({ isOpen, setIsOpen, trip, onEdit, onDelete }: Vi
              </div>
         </div>
 
-        <DialogFooter className="mt-4 sm:justify-between w-full">
-            <Button variant="destructive-outline" className="w-full sm:w-auto" onClick={() => onDelete(trip.id)}>
-                <Trash2 className="mr-2 h-4 w-4" /> Delete
-            </Button>
-            <div className="flex gap-2 w-full sm:w-auto mt-2 sm:mt-0">
-                <Button variant="outline" className="w-full" onClick={() => setIsOpen(false)}>Close</Button>
-                <Button className="w-full" onClick={() => onEdit(trip)}>
-                    <Edit className="mr-2 h-4 w-4" /> Edit
-                </Button>
-            </div>
+        <DialogFooter className="mt-4 sm:justify-end w-full">
+            <Button variant="outline" className="w-full" onClick={() => setIsOpen(false)}>Close</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
