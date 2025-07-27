@@ -1,3 +1,4 @@
+
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import type { UserInfo, Trip, AppSettings, Vehicle } from './types';
@@ -51,6 +52,7 @@ export function generatePdf(
   }, { totalMiles: 0, grossEarnings: 0, totalExpenses: 0 });
 
   const totalDeductions = summaryData.totalMiles * settings.deductionRate;
+  const netEarnings = summaryData.grossEarnings - summaryData.totalExpenses;
 
   doc.setFontSize(12);
   doc.setFont('helvetica', 'bold');
@@ -62,6 +64,7 @@ export function generatePdf(
           [`Total ${settings.unit === 'miles' ? 'Miles' : 'Kilometers'} Driven`, summaryData.totalMiles.toFixed(1)],
           ['Gross Earnings', formatCurrency(summaryData.grossEarnings, settings.currency)],
           ['Total Expenses', formatCurrency(summaryData.totalExpenses, settings.currency)],
+          ['Net Earnings', formatCurrency(netEarnings, settings.currency)],
           ['Tax Deduction Rate', `${formatCurrency(settings.deductionRate, settings.currency)} / ${settings.unit.slice(0, -1)}`],
           ['Total Tax Deduction', formatCurrency(totalDeductions, settings.currency)],
       ],
@@ -74,7 +77,8 @@ export function generatePdf(
     const vehicle = vehicles.find(v => v.id === trip.vehicleId);
     const tripDate = new Date(trip.date);
     const formattedDate = format(new Date(tripDate.getTime() + tripDate.getTimezoneOffset() * 60000), 'yyyy-MM-dd');
-
+    const totalExpenses = trip.expenses.gasoline + trip.expenses.tolls + trip.expenses.food;
+    const net = trip.grossEarnings - totalExpenses;
 
     return [
       formattedDate,
@@ -84,6 +88,7 @@ export function generatePdf(
       formatCurrency(trip.expenses.gasoline, settings.currency),
       formatCurrency(trip.expenses.tolls, settings.currency),
       formatCurrency(trip.expenses.food, settings.currency),
+      formatCurrency(net, settings.currency),
       vehicle ? `${vehicle.make} ${vehicle.model}` : 'N/A',
     ];
   });
@@ -94,9 +99,15 @@ export function generatePdf(
   doc.text('Trip Log', 14, finalY + 15);
   doc.autoTable({
     startY: finalY + 20,
-    head: [['Date', 'Duration', 'Distance', 'Gross', 'Gasoline', 'Tolls', 'Food', 'Vehicle']],
+    head: [['Date', 'Duration', 'Distance', 'Gross', 'Gasoline', 'Tolls', 'Food', 'Net', 'Vehicle']],
     body: tableBody,
     theme: 'grid',
+    headStyles: {
+      fontSize: 8,
+    },
+    bodyStyles: {
+        fontSize: 8,
+    }
   });
 
   // Footer
