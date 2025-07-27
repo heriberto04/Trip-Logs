@@ -165,7 +165,7 @@ export function AddTripSheet({ isOpen, setIsOpen, trip }: AddTripSheetProps) {
           
           <div className="space-y-2">
             <Label htmlFor="miles">Miles</Label>
-            <Input id="miles" type="number" step="0.1" placeholder="0" {...form.register('miles')} />
+            <Input id="miles" type="number" step="0.01" placeholder="0" {...form.register('miles')} />
           </div>
 
           <div className="space-y-2">
