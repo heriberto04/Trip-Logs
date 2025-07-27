@@ -82,7 +82,7 @@ export function TripCard({ trip, onView, onEdit }: TripCardProps) {
         </CardHeader>
         <Separator />
         <CardContent className="p-2 text-sm">
-            <div className="grid grid-cols-3 gap-x-2 text-center">
+            <div className="grid grid-cols-4 gap-x-2 text-center">
                 {/* Column 1 */}
                 <div className="space-y-1 text-left">
                     <div>
@@ -90,26 +90,26 @@ export function TripCard({ trip, onView, onEdit }: TripCardProps) {
                         <p className="font-semibold text-base">{durationFormatted}</p>
                     </div>
                      <div>
-                        <p className="text-muted-foreground text-xs">Gross</p>
-                        <p className="font-semibold text-base text-green-500">{formatCurrency(trip.grossEarnings, settings.currency)}</p>
+                        <p className="text-muted-foreground text-xs">Miles</p>
+                        <p className="font-semibold text-base">{trip.miles}</p>
                     </div>
                 </div>
                 {/* Column 2 */}
                 <div className="space-y-1 text-left">
                      <div>
-                        <p className="text-muted-foreground text-xs">Miles</p>
-                        <p className="font-semibold text-base">{trip.miles}</p>
-                    </div>
-                    <div>
                         <p className="text-muted-foreground text-xs">Expenses</p>
                         <p className="font-semibold text-base text-red-500">{formatCurrency(totalExpenses, settings.currency)}</p>
                     </div>
-                </div>
-                {/* Column 3 */}
-                <div className="space-y-1 text-right">
-                   <div>
+                    <div>
                         <p className="text-muted-foreground text-xs">Deduction</p>
                         <p className="font-semibold text-base">{formatCurrency(deductions, settings.currency)}</p>
+                    </div>
+                </div>
+                {/* Column 3 */}
+                <div className="space-y-1 text-left">
+                   <div>
+                        <p className="text-muted-foreground text-xs">Gross</p>
+                        <p className="font-semibold text-base text-green-500">{formatCurrency(trip.grossEarnings, settings.currency)}</p>
                     </div>
                     <div>
                         <p className="text-muted-foreground text-xs">Net</p>
@@ -119,6 +119,13 @@ export function TripCard({ trip, onView, onEdit }: TripCardProps) {
                         )}>
                             {formatCurrency(net, settings.currency)}
                         </p>
+                    </div>
+                </div>
+                 {/* Column 4 */}
+                 <div className="space-y-1 text-right">
+                   <div>
+                        <p className="text-muted-foreground text-xs">$/hour</p>
+                        <p className="font-semibold text-base">{formatCurrency(hourlyRate, settings.currency)}</p>
                     </div>
                 </div>
             </div>
