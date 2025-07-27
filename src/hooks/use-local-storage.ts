@@ -15,10 +15,12 @@ export function useLocalStorage<T>(key: string, defaultValue: T): [T, React.Disp
   });
 
   useEffect(() => {
-    try {
-      window.localStorage.setItem(key, JSON.stringify(value));
-    } catch (error) {
-      console.error(error);
+    if (typeof window !== 'undefined') {
+        try {
+            window.localStorage.setItem(key, JSON.stringify(value));
+        } catch (error) {
+            console.error(error);
+        }
     }
   }, [key, value]);
 
