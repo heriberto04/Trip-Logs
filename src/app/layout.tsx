@@ -4,7 +4,7 @@ import { AppProviders } from '@/contexts/app-provider';
 import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
-  title: 'DriveTrack Pro',
+  title: 'Trip Logs',
   description: 'Track your driving for business and tax purposes.',
 };
 

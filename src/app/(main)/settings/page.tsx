@@ -155,20 +155,20 @@ export default function SettingsPage() {
         
         {/* About */}
         <AccordionItem value="about">
-          <AccordionTrigger className="text-xl font-semibold p-4 bg-card rounded-lg">About DriveTrack Pro</AccordionTrigger>
+          <AccordionTrigger className="text-xl font-semibold p-4 bg-card rounded-lg">About Trip Logs</AccordionTrigger>
           <AccordionContent className="p-4 space-y-4 text-muted-foreground">
             <h3 className="font-semibold text-foreground">App Description</h3>
-            <p>DriveTrack Pro is a comprehensive yet intuitive application designed for drivers who need to meticulously track their trips for business and tax purposes. Log every journey with details on earnings, expenses, and mileage, and let the app provide you with powerful summaries and automated calculations to maximize your deductions and understand your profitability.</p>
+            <p>Trip Logs is a comprehensive yet intuitive application designed for drivers who need to meticulously track their trips for business and tax purposes. Log every journey with details on earnings, expenses, and mileage, and let the app provide you with powerful summaries and automated calculations to maximize your deductions and understand your profitability.</p>
             <h3 className="font-semibold text-foreground">Privacy Statement</h3>
-            <p>Your privacy is our utmost priority. All the information you enter into DriveTrack Pro, including your personal details, vehicle information, and trip logs, is stored exclusively on your local device. We do not have access to your data, and it is never transmitted to any external servers. You are in complete control of your information at all times.</p>
+            <p>Your privacy is our utmost priority. All the information you enter into Trip Logs, including your personal details, vehicle information, and trip logs, is stored exclusively on your local device. We do not have access to your data, and it is never transmitted to any external servers. You are in complete control of your information at all times.</p>
             <h3 className="font-semibold text-foreground">User Agreement</h3>
-            <p>By using DriveTrack Pro, you agree that you are responsible for the accuracy of the data you enter. The calculations provided by the app are for informational purposes and should be verified with a professional tax advisor. The developers of DriveTrack Pro are not liable for any financial decisions or tax filings made based on the information provided by this application.</p>
+            <p>By using Trip Logs, you agree that you are responsible for the accuracy of the data you enter. The calculations provided by the app are for informational purposes and should be verified with a professional tax advisor. The developers of Trip Logs are not liable for any financial decisions or tax filings made based on the information provided by this application.</p>
           </AccordionContent>
         </AccordionItem>
       </Accordion>
       
       <p className="text-center text-xs text-muted-foreground mt-8">
-        © {new Date().getFullYear()} DriveTrack Pro. All rights reserved.
+        © {new Date().getFullYear()} Trip Logs. All rights reserved.
       </p>
 
       <AddVehicleDialog isOpen={isAddVehicleOpen} setIsOpen={setIsAddVehicleOpen} />

@@ -21,7 +21,7 @@ export function generatePdf(
   // Header
   doc.setFontSize(22);
   doc.setFont('helvetica', 'bold');
-  doc.text('DriveTrack Pro', 14, 22);
+  doc.text('Trip Logs', 14, 22);
   doc.setFontSize(11);
   doc.setFont('helvetica', 'normal');
   doc.text(`Yearly Driving Report: ${year}`, 14, 30);
@@ -105,8 +105,8 @@ export function generatePdf(
     doc.setPage(i);
     doc.setFontSize(8);
     doc.text(`Page ${i} of ${pageCount}`, doc.internal.pageSize.width - 25, doc.internal.pageSize.height - 10);
-    doc.text(`DriveTrack Pro Report © ${year}`, 14, doc.internal.pageSize.height - 10);
+    doc.text(`Trip Logs Report © ${year}`, 14, doc.internal.pageSize.height - 10);
   }
 
-  doc.save(`DriveTrack_Pro_Report_${year}.pdf`);
+  doc.save(`Trip_Logs_Report_${year}.pdf`);
 }
