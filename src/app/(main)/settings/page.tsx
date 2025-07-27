@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent } from '@/components/ui/card';
-import { Trash2, PlusCircle, Export } from 'lucide-react';
+import { Trash2, PlusCircle, Upload } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import { useUserInfo } from '@/contexts/user-info-context';
@@ -122,7 +122,7 @@ export default function SettingsPage() {
                 </Select>
             </div>
             <Button className="w-full" onClick={handleExport} disabled={availableYears.length === 0}>
-                <Export className="mr-2 h-4 w-4"/>
+                <Upload className="mr-2 h-4 w-4"/>
                 Export PDF
             </Button>
           </AccordionContent>

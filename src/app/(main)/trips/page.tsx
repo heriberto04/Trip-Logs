@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 import { AddTripSheet } from '@/components/add-trip-sheet';
 import type { Trip } from '@/lib/types';
-import Image from 'next/image';
 
 export default function TripsPage() {
   const { trips } = useTrips();
@@ -37,7 +36,6 @@ export default function TripsPage() {
       
       {currentYearTrips.length === 0 ? (
         <div className="text-center mt-20 flex flex-col items-center">
-            <Image src="https://placehold.co/300x200.png" alt="No trips yet" width={300} height={200} className="rounded-lg mb-4 opacity-50" data-ai-hint="road trip empty" />
             <p className="text-muted-foreground">No trips logged for {currentYear}.</p>
             <p className="text-muted-foreground">Tap the plus button to get started!</p>
         </div>

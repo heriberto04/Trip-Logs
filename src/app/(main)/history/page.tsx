@@ -6,7 +6,6 @@ import { TripCard } from '@/components/trip-card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import type { Trip } from '@/lib/types';
 import { AddTripSheet } from '@/components/add-trip-sheet';
-import Image from 'next/image';
 
 export default function HistoryPage() {
   const { trips } = useTrips();
@@ -42,7 +41,6 @@ export default function HistoryPage() {
       
       {tripsByYear.length === 0 ? (
         <div className="text-center mt-20 flex flex-col items-center">
-             <Image src="https://placehold.co/300x200.png" alt="No history" width={300} height={200} className="rounded-lg mb-4 opacity-50" data-ai-hint="archive box empty" />
             <p className="text-muted-foreground">No trips from previous years found.</p>
         </div>
       ) : (
