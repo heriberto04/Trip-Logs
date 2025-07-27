@@ -82,33 +82,37 @@ export function TripCard({ trip, onView, onEdit }: TripCardProps) {
         </CardHeader>
         <Separator />
         <CardContent className="p-3 text-sm">
-            <div className="grid grid-cols-3 gap-x-4 gap-y-2 text-left">
-                {/* Top Row */}
-                <div>
-                    <p className="text-muted-foreground text-xs">Duration</p>
-                    <p className="font-semibold text-base">{durationFormatted}</p>
-                </div>
-                <div>
-                    <p className="text-muted-foreground text-xs">Miles</p>
-                    <p className="font-semibold text-base">{trip.miles}</p>
-                </div>
-                <div>
-                    <p className="text-muted-foreground text-xs">Deduction</p>
-                    <p className="font-semibold text-base">{formatCurrency(deductions, settings.currency)}</p>
+            <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-left">
+                {/* Left Column */}
+                <div className="space-y-2">
+                    <div className="flex justify-between">
+                        <p className="text-muted-foreground text-xs">Duration</p>
+                        <p className="font-semibold text-base">{durationFormatted}</p>
+                    </div>
+                     <div className="flex justify-between">
+                        <p className="text-muted-foreground text-xs">Miles</p>
+                        <p className="font-semibold text-base">{trip.miles}</p>
+                    </div>
+                    <div className="flex justify-between">
+                        <p className="text-muted-foreground text-xs">Deduction</p>
+                        <p className="font-semibold text-base">{formatCurrency(deductions, settings.currency)}</p>
+                    </div>
                 </div>
 
-                {/* Bottom Row */}
-                <div>
-                    <p className="text-muted-foreground text-xs">Gross</p>
-                    <p className="font-semibold text-base text-green-500">{formatCurrency(trip.grossEarnings, settings.currency)}</p>
-                </div>
-                <div>
-                    <p className="text-muted-foreground text-xs">Expenses</p>
-                    <p className="font-semibold text-base text-red-500">{formatCurrency(totalExpenses, settings.currency)}</p>
-                </div>
-                <div>
-                    <p className="text-muted-foreground text-xs">$/hour</p>
-                    <p className="font-semibold text-base">{formatCurrency(hourlyRate, settings.currency)}</p>
+                {/* Right Column */}
+                <div className="space-y-2">
+                    <div className="flex justify-between">
+                        <p className="text-muted-foreground text-xs">Gross</p>
+                        <p className="font-semibold text-base text-green-500">{formatCurrency(trip.grossEarnings, settings.currency)}</p>
+                    </div>
+                     <div className="flex justify-between">
+                        <p className="text-muted-foreground text-xs">Net</p>
+                        <p className={cn("font-semibold text-base", net >= 0 ? 'text-green-400': 'text-red-400')}>{formatCurrency(net, settings.currency)}</p>
+                    </div>
+                     <div className="flex justify-between">
+                        <p className="text-muted-foreground text-xs">Expenses</p>
+                        <p className="font-semibold text-base text-red-500">{formatCurrency(totalExpenses, settings.currency)}</p>
+                    </div>
                 </div>
             </div>
         </CardContent>
