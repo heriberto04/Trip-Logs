@@ -106,17 +106,16 @@ export function TripCard({ trip, onEdit }: TripCardProps) {
                         <p className="text-muted-foreground text-xs">Deduction</p>
                         <p className="font-semibold text-base">{formatCurrency(deductions, settings.currency)}</p>
                     </div>
+                    <div>
+                        <p className="text-muted-foreground text-xs">Net</p>
+                        <p className={cn(
+                            "font-semibold text-base",
+                            net >= 0 ? 'text-green-400' : 'text-red-400'
+                        )}>
+                            {formatCurrency(net, settings.currency)}
+                        </p>
+                    </div>
                 </div>
-            </div>
-            <Separator className="my-2"/>
-            <div className="flex justify-between items-center">
-                <p className="font-bold text-lg">Net</p>
-                <p className={cn(
-                    "font-bold text-lg",
-                    net >= 0 ? 'text-green-400' : 'text-red-400'
-                )}>
-                    {formatCurrency(net, settings.currency)}
-                </p>
             </div>
         </CardContent>
       </Card>
@@ -138,4 +137,3 @@ export function TripCard({ trip, onEdit }: TripCardProps) {
     </>
   );
 }
-
