@@ -53,7 +53,7 @@ export function TripCard({ trip, onEdit }: TripCardProps) {
   return (
     <>
       <Card className="overflow-hidden transition-all duration-300 ease-in-out">
-        <CardHeader className="flex flex-row items-center justify-between p-3 bg-card">
+        <CardHeader className="flex flex-row items-center justify-between p-2 bg-card">
           <CardTitle className="text-base font-headline">{formattedDate}</CardTitle>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -73,7 +73,7 @@ export function TripCard({ trip, onEdit }: TripCardProps) {
             </DropdownMenuContent>
           </DropdownMenu>
         </CardHeader>
-        <CardContent className="p-3 grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+        <CardContent className="p-2 grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
           <div>
             <p className="text-muted-foreground text-xs">Duration</p>
             <p className="font-semibold">{durationFormatted}</p>
@@ -91,7 +91,7 @@ export function TripCard({ trip, onEdit }: TripCardProps) {
             <p className="font-semibold">{formatCurrency(deductions, settings.currency)}</p>
           </div>
         </CardContent>
-        <CardFooter className="p-3 bg-secondary/20 flex justify-between items-center">
+        <CardFooter className="p-2 bg-secondary/20 flex justify-between items-center">
             <div className="text-left">
                 <p className="text-xs text-muted-foreground">Gross</p>
                 <p className="font-semibold text-green-500 text-sm">{formatCurrency(trip.grossEarnings, settings.currency)}</p>
