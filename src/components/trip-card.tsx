@@ -90,19 +90,23 @@ export function TripCard({ trip, onView, onEdit }: TripCardProps) {
                         <p className="font-semibold text-base">{durationFormatted}</p>
                     </div>
                      <div>
-                        <p className="text-muted-foreground text-xs">Gross</p>
-                        <p className="font-semibold text-base text-green-500">{formatCurrency(trip.grossEarnings, settings.currency)}</p>
+                        <p className="text-muted-foreground text-xs">Expenses</p>
+                        <p className="font-semibold text-base text-red-500">{formatCurrency(totalExpenses, settings.currency)}</p>
                     </div>
                 </div>
                 {/* Column 2 */}
                 <div className="space-y-1 text-left">
                      <div>
-                        <p className="text-muted-foreground text-xs">Expenses</p>
-                        <p className="font-semibold text-base text-red-500">{formatCurrency(totalExpenses, settings.currency)}</p>
-                    </div>
-                    <div>
                         <p className="text-muted-foreground text-xs">Deduction</p>
                         <p className="font-semibold text-base">{formatCurrency(deductions, settings.currency)}</p>
+                    </div>
+                    <div>
+                        <p className="text-muted-foreground text-xs">Gross</p>
+                        <p className={cn(
+                            "font-semibold text-base text-green-500"
+                        )}>
+                            {formatCurrency(trip.grossEarnings, settings.currency)}
+                        </p>
                     </div>
                 </div>
                 {/* Column 3 */}
