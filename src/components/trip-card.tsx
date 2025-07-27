@@ -53,8 +53,8 @@ export function TripCard({ trip, onEdit }: TripCardProps) {
   return (
     <>
       <Card className="overflow-hidden transition-all duration-300 ease-in-out">
-        <CardHeader className="flex flex-row items-center justify-between p-4 bg-card">
-          <CardTitle className="text-lg font-headline">{formattedDate}</CardTitle>
+        <CardHeader className="flex flex-row items-center justify-between p-3 bg-card">
+          <CardTitle className="text-base font-headline">{formattedDate}</CardTitle>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="h-8 w-8">
@@ -73,37 +73,37 @@ export function TripCard({ trip, onEdit }: TripCardProps) {
             </DropdownMenuContent>
           </DropdownMenu>
         </CardHeader>
-        <CardContent className="p-4 grid grid-cols-2 gap-4 text-sm">
+        <CardContent className="p-3 grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
           <div>
-            <p className="text-muted-foreground">Duration</p>
+            <p className="text-muted-foreground text-xs">Duration</p>
             <p className="font-semibold">{durationFormatted}</p>
           </div>
           <div>
-            <p className="text-muted-foreground">Hourly Rate</p>
+            <p className="text-muted-foreground text-xs">Hourly Rate</p>
             <p className="font-semibold">{formatCurrency(hourlyRate, settings.currency)}</p>
           </div>
           <div>
-            <p className="text-muted-foreground">{settings.unit === 'miles' ? 'Miles' : 'Kilometers'}</p>
+            <p className="text-muted-foreground text-xs">{settings.unit === 'miles' ? 'Miles' : 'Kilometers'}</p>
             <p className="font-semibold">{trip.miles}</p>
           </div>
           <div>
-            <p className="text-muted-foreground">Deductions</p>
+            <p className="text-muted-foreground text-xs">Deductions</p>
             <p className="font-semibold">{formatCurrency(deductions, settings.currency)}</p>
           </div>
         </CardContent>
-        <CardFooter className="p-4 bg-secondary/20 flex justify-between items-center">
+        <CardFooter className="p-3 bg-secondary/20 flex justify-between items-center">
             <div className="text-left">
                 <p className="text-xs text-muted-foreground">Gross</p>
-                <p className="font-semibold text-green-500">{formatCurrency(trip.grossEarnings, settings.currency)}</p>
+                <p className="font-semibold text-green-500 text-sm">{formatCurrency(trip.grossEarnings, settings.currency)}</p>
             </div>
             <div className="text-center">
                 <p className="text-xs text-muted-foreground">Expenses</p>
-                <p className="font-semibold text-red-500">{formatCurrency(totalExpenses, settings.currency)}</p>
+                <p className="font-semibold text-red-500 text-sm">{formatCurrency(totalExpenses, settings.currency)}</p>
             </div>
             <div className="text-right">
                 <p className="text-xs text-muted-foreground">Net</p>
                 <p className={cn(
-                    "font-bold text-lg",
+                    "font-bold text-base",
                     net >= 0 ? 'text-green-400' : 'text-red-400'
                 )}>
                     {formatCurrency(net, settings.currency)}
