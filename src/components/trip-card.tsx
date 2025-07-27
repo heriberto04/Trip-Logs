@@ -43,7 +43,8 @@ export function TripCard({ trip, onEdit }: TripCardProps) {
 
   const durationFormatted = `${Math.floor(durationHours)}h ${durationMinutes % 60}m`;
 
-  const handleDelete = () => {
+  const handleDelete = (e: React.MouseEvent) => {
+    e.stopPropagation();
     deleteTrip(trip.id);
     setShowDeleteConfirm(false);
   };
@@ -54,16 +55,19 @@ export function TripCard({ trip, onEdit }: TripCardProps) {
 
   return (
     <>
-      <Card className="overflow-hidden transition-all duration-300 ease-in-out">
+      <Card 
+        className="overflow-hidden transition-all duration-200 ease-in-out hover:shadow-md hover:bg-card/95 cursor-pointer"
+        onClick={onEdit}
+      >
         <CardHeader className="flex flex-row items-center justify-between p-2 bg-card">
           <CardTitle className="text-lg font-headline">{formattedDate}</CardTitle>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-8 w-8">
+              <Button variant="ghost" size="icon" className="h-8 w-8" onClick={(e) => e.stopPropagation()}>
                 <MoreHorizontal className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent align="end" onClick={(e) => e.stopPropagation()}>
               <DropdownMenuItem onClick={onEdit}>
                 <Edit className="mr-2 h-4 w-4" />
                 <span>Edit</span>
@@ -77,34 +81,34 @@ export function TripCard({ trip, onEdit }: TripCardProps) {
         </CardHeader>
         <Separator />
         <CardContent className="p-2 text-sm">
-            <div className="grid grid-cols-3 gap-x-2">
+            <div className="grid grid-cols-3 gap-x-2 text-center">
                 {/* Column 1 */}
-                <div className="space-y-1">
+                <div className="space-y-1 text-left">
                     <div>
                         <p className="text-muted-foreground text-xs">Duration</p>
                         <p className="font-semibold text-base">{durationFormatted}</p>
                     </div>
-                    <div>
-                        <p className="text-muted-foreground text-xs">Gross</p>
-                        <p className="font-semibold text-base text-green-500">{formatCurrency(trip.grossEarnings, settings.currency)}</p>
+                     <div>
+                        <p className="text-muted-foreground text-xs">Deduction</p>
+                        <p className="font-semibold text-base">{formatCurrency(deductions, settings.currency)}</p>
                     </div>
                 </div>
                 {/* Column 2 */}
-                <div className="space-y-1">
+                <div className="space-y-1 text-left">
                     <div>
                         <p className="text-muted-foreground text-xs">{settings.unit === 'miles' ? 'Miles' : 'Kilometers'}</p>
                         <p className="font-semibold text-base">{trip.miles}</p>
                     </div>
-                    <div>
-                        <p className="text-muted-foreground text-xs">Expenses</p>
-                        <p className="font-semibold text-base text-red-500">{formatCurrency(totalExpenses, settings.currency)}</p>
+                     <div>
+                        <p className="text-muted-foreground text-xs">Gross</p>
+                        <p className="font-semibold text-base text-green-500">{formatCurrency(trip.grossEarnings, settings.currency)}</p>
                     </div>
                 </div>
                 {/* Column 3 */}
                 <div className="space-y-1 text-right">
-                    <div>
-                        <p className="text-muted-foreground text-xs">Deduction</p>
-                        <p className="font-semibold text-base">{formatCurrency(deductions, settings.currency)}</p>
+                   <div>
+                        <p className="text-muted-foreground text-xs">Expenses</p>
+                        <p className="font-semibold text-base text-red-500">{formatCurrency(totalExpenses, settings.currency)}</p>
                     </div>
                     <div>
                         <p className="text-muted-foreground text-xs">Net</p>
@@ -121,7 +125,7 @@ export function TripCard({ trip, onEdit }: TripCardProps) {
       </Card>
 
       <AlertDialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
-        <AlertDialogContent>
+        <AlertDialogContent onClick={(e) => e.stopPropagation()}>
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
             <AlertDialogDescription>
