@@ -55,7 +55,7 @@ export function TripCard({ trip, onEdit }: TripCardProps) {
   return (
     <>
       <Card className="overflow-hidden transition-all duration-300 ease-in-out">
-        <CardHeader className="flex flex-row items-center justify-between p-3 bg-card">
+        <CardHeader className="flex flex-row items-center justify-between p-2 bg-card">
           <CardTitle className="text-lg font-headline">{formattedDate}</CardTitle>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -76,9 +76,9 @@ export function TripCard({ trip, onEdit }: TripCardProps) {
           </DropdownMenu>
         </CardHeader>
         <Separator />
-        <CardContent className="p-3 grid grid-cols-3 gap-x-2 text-sm">
+        <CardContent className="p-2 grid grid-cols-3 gap-x-2 text-sm">
           {/* Column 1 */}
-          <div className="space-y-2">
+          <div className="space-y-1">
             <div>
               <p className="text-muted-foreground text-xs">Duration</p>
               <p className="font-semibold text-base">{durationFormatted}</p>
@@ -89,7 +89,7 @@ export function TripCard({ trip, onEdit }: TripCardProps) {
             </div>
           </div>
           {/* Column 2 */}
-          <div className="space-y-2">
+          <div className="space-y-1">
             <div>
               <p className="text-muted-foreground text-xs">Gross</p>
               <p className="font-semibold text-base text-green-500">{formatCurrency(trip.grossEarnings, settings.currency)}</p>
@@ -100,7 +100,7 @@ export function TripCard({ trip, onEdit }: TripCardProps) {
             </div>
           </div>
           {/* Column 3 */}
-          <div className="space-y-2 text-right">
+          <div className="space-y-1 text-right">
             <div>
                 <p className="text-muted-foreground text-xs">Net</p>
                 <p className={cn(
