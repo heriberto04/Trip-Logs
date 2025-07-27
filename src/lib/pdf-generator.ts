@@ -64,7 +64,7 @@ export function generatePdf(
           [`Total ${settings.unit === 'miles' ? 'Miles' : 'Kilometers'} Driven`, summaryData.totalMiles.toFixed(1)],
           ['Gross Earnings', formatCurrency(summaryData.grossEarnings, settings.currency)],
           ['Total Expenses', formatCurrency(summaryData.totalExpenses, settings.currency)],
-          ['Net Earnings', formatCurrency(netEarnings, settings.currency)],
+          ['Total Net', formatCurrency(netEarnings, settings.currency)],
           ['Tax Deduction Rate', `${formatCurrency(settings.deductionRate, settings.currency)} / ${settings.unit.slice(0, -1)}`],
           ['Total Tax Deduction', formatCurrency(totalDeductions, settings.currency)],
       ],
