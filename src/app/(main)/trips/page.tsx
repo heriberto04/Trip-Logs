@@ -32,7 +32,6 @@ export default function TripsPage() {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-4 text-center font-headline">My Trips</h1>
       
       {currentYearTrips.length === 0 ? (
         <div className="text-center mt-20 flex flex-col items-center">

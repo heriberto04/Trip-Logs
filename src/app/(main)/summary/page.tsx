@@ -67,7 +67,6 @@ export default function SummaryPage() {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-4 text-center font-headline">Summary</h1>
 
       <Tabs defaultValue="7days" onValueChange={(value) => setFilter(value as FilterType)} className="w-full mb-6">
         <TabsList className="grid w-full grid-cols-3">

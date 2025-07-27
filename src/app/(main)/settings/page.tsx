@@ -52,7 +52,6 @@ export default function SettingsPage() {
 
   return (
     <div className="container mx-auto p-4 flex flex-col gap-4">
-      <h1 className="text-3xl font-bold text-center font-headline">Settings</h1>
       
       <Accordion type="multiple" className="w-full space-y-4">
         {/* User Information */}
