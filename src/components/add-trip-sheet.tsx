@@ -165,9 +165,18 @@ export function AddTripSheet({ isOpen, setIsOpen, trip }: AddTripSheetProps) {
           <div className="space-y-2">
             <Label>Expenses</Label>
             <div className="grid grid-cols-3 gap-2">
-              <Input type="number" placeholder="Gas" step="0.01" {...form.register('expenses.gasoline')} />
-              <Input type="number" placeholder="Tolls" step="0.01" {...form.register('expenses.tolls')} />
-              <Input type="number" placeholder="Food" step="0.01" {...form.register('expenses.food')} />
+                <div className="space-y-1">
+                    <Label htmlFor="gasoline" className="text-xs">Gasoline</Label>
+                    <Input id="gasoline" type="number" step="0.01" {...form.register('expenses.gasoline')} />
+                </div>
+                <div className="space-y-1">
+                    <Label htmlFor="tolls" className="text-xs">Tolls</Label>
+                    <Input id="tolls" type="number" step="0.01" {...form.register('expenses.tolls')} />
+                </div>
+                <div className="space-y-1">
+                    <Label htmlFor="food" className="text-xs">Food</Label>
+                    <Input id="food" type="number" step="0.01" {...form.register('expenses.food')} />
+                </div>
             </div>
           </div>
 
