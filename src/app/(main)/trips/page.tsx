@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useMemo } from 'react';
@@ -7,11 +8,17 @@ import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 import { AddTripSheet } from '@/components/add-trip-sheet';
 import type { Trip } from '@/lib/types';
+import { ViewTripDialog } from '@/components/view-trip-dialog';
+import { useToast } from '@/hooks/use-toast';
 
 export default function TripsPage() {
-  const { trips } = useTrips();
+  const { trips, deleteTrip } = useTrips();
+  const { toast } = useToast();
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [editingTrip, setEditingTrip] = useState<Trip | null>(null);
+
+  const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
+  const [viewingTrip, setViewingTrip] = useState<Trip | null>(null);
 
   const currentYear = new Date().getFullYear();
   const currentYearTrips = useMemo(() => {
@@ -28,7 +35,22 @@ export default function TripsPage() {
   const handleEditTrip = (trip: Trip) => {
     setEditingTrip(trip);
     setIsSheetOpen(true);
+    setIsViewDialogOpen(false); // Close view dialog if open
   };
+
+  const handleViewTrip = (trip: Trip) => {
+    setViewingTrip(trip);
+    setIsViewDialogOpen(true);
+  };
+  
+  const handleDeleteTrip = (id: string) => {
+    deleteTrip(id);
+    setIsViewDialogOpen(false);
+    toast({
+        title: "Trip Deleted",
+        description: "The trip has been permanently removed.",
+    });
+  }
 
   return (
     <div className="container mx-auto p-4">
@@ -41,7 +63,12 @@ export default function TripsPage() {
       ) : (
         <div className="space-y-4">
           {currentYearTrips.map(trip => (
-            <TripCard key={trip.id} trip={trip} onEdit={() => handleEditTrip(trip)} />
+            <TripCard 
+              key={trip.id} 
+              trip={trip} 
+              onView={() => handleViewTrip(trip)}
+              onEdit={() => handleEditTrip(trip)} 
+            />
           ))}
         </div>
       )}
@@ -58,6 +85,14 @@ export default function TripsPage() {
         isOpen={isSheetOpen}
         setIsOpen={setIsSheetOpen}
         trip={editingTrip}
+      />
+      
+      <ViewTripDialog
+        isOpen={isViewDialogOpen}
+        setIsOpen={setIsViewDialogOpen}
+        trip={viewingTrip}
+        onEdit={handleEditTrip}
+        onDelete={handleDeleteTrip}
       />
     </div>
   );

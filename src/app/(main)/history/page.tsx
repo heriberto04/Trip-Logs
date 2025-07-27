@@ -1,16 +1,23 @@
+
 "use client";
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTrips } from '@/contexts/trips-context';
 import { TripCard } from '@/components/trip-card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import type { Trip } from '@/lib/types';
 import { AddTripSheet } from '@/components/add-trip-sheet';
+import { ViewTripDialog } from '@/components/view-trip-dialog';
+import { useToast } from '@/hooks/use-toast';
 
 export default function HistoryPage() {
-  const { trips } = useTrips();
+  const { trips, deleteTrip } = useTrips();
+  const { toast } = useToast();
   const [editingTrip, setEditingTrip] = React.useState<Trip | null>(null);
   const [isSheetOpen, setIsSheetOpen] = React.useState(false);
+  
+  const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
+  const [viewingTrip, setViewingTrip] = useState<Trip | null>(null);
 
   const tripsByYear = useMemo(() => {
     const currentYear = new Date().getFullYear();
@@ -33,6 +40,21 @@ export default function HistoryPage() {
   const handleEditTrip = (trip: Trip) => {
     setEditingTrip(trip);
     setIsSheetOpen(true);
+    setIsViewDialogOpen(false);
+  };
+  
+  const handleViewTrip = (trip: Trip) => {
+    setViewingTrip(trip);
+    setIsViewDialogOpen(true);
+  };
+
+  const handleDeleteTrip = (id: string) => {
+    deleteTrip(id);
+    setIsViewDialogOpen(false);
+    toast({
+        title: "Trip Deleted",
+        description: "The trip has been permanently removed.",
+    });
   };
 
   return (
@@ -50,7 +72,12 @@ export default function HistoryPage() {
               <AccordionContent>
                 <div className="space-y-4 p-1">
                   {yearTrips.map(trip => (
-                    <TripCard key={trip.id} trip={trip} onEdit={() => handleEditTrip(trip)} />
+                    <TripCard 
+                      key={trip.id} 
+                      trip={trip} 
+                      onView={() => handleViewTrip(trip)}
+                      onEdit={() => handleEditTrip(trip)} 
+                    />
                   ))}
                 </div>
               </AccordionContent>
@@ -63,6 +90,14 @@ export default function HistoryPage() {
         isOpen={isSheetOpen}
         setIsOpen={setIsSheetOpen}
         trip={editingTrip}
+      />
+      
+       <ViewTripDialog
+        isOpen={isViewDialogOpen}
+        setIsOpen={setIsViewDialogOpen}
+        trip={viewingTrip}
+        onEdit={handleEditTrip}
+        onDelete={handleDeleteTrip}
       />
     </div>
   );

@@ -26,10 +26,11 @@ import { Separator } from '@/components/ui/separator';
 
 interface TripCardProps {
   trip: Trip;
+  onView: () => void;
   onEdit: () => void;
 }
 
-export function TripCard({ trip, onEdit }: TripCardProps) {
+export function TripCard({ trip, onView, onEdit }: TripCardProps) {
   const { deleteTrip } = useTrips();
   const { settings } = useSettings();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -57,7 +58,7 @@ export function TripCard({ trip, onEdit }: TripCardProps) {
     <>
       <Card 
         className="overflow-hidden transition-all duration-200 ease-in-out hover:shadow-md hover:bg-card/95 cursor-pointer"
-        onClick={onEdit}
+        onClick={onView}
       >
         <CardHeader className="flex flex-row items-center justify-between p-2 bg-card">
           <CardTitle className="text-lg font-headline">{formattedDate}</CardTitle>
@@ -89,19 +90,19 @@ export function TripCard({ trip, onEdit }: TripCardProps) {
                         <p className="font-semibold text-base">{durationFormatted}</p>
                     </div>
                      <div>
-                        <p className="text-muted-foreground text-xs">Deduction</p>
-                        <p className="font-semibold text-base">{formatCurrency(deductions, settings.currency)}</p>
+                        <p className="text-muted-foreground text-xs">Miles</p>
+                        <p className="font-semibold text-base">{trip.miles}</p>
                     </div>
                 </div>
                 {/* Column 2 */}
                 <div className="space-y-1 text-left">
-                    <div>
-                        <p className="text-muted-foreground text-xs">{settings.unit === 'miles' ? 'Miles' : 'Kilometers'}</p>
-                        <p className="font-semibold text-base">{trip.miles}</p>
-                    </div>
                      <div>
                         <p className="text-muted-foreground text-xs">Gross</p>
                         <p className="font-semibold text-base text-green-500">{formatCurrency(trip.grossEarnings, settings.currency)}</p>
+                    </div>
+                    <div>
+                        <p className="text-muted-foreground text-xs">Deduction</p>
+                        <p className="font-semibold text-base">{formatCurrency(deductions, settings.currency)}</p>
                     </div>
                 </div>
                 {/* Column 3 */}
