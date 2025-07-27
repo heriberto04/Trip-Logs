@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState } from 'react';
@@ -73,43 +74,46 @@ export function TripCard({ trip, onEdit }: TripCardProps) {
             </DropdownMenuContent>
           </DropdownMenu>
         </CardHeader>
-        <CardContent className="p-2 grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
-          <div>
-            <p className="text-muted-foreground text-xs">Duration</p>
-            <p className="font-semibold">{durationFormatted}</p>
-          </div>
-          <div>
-            <p className="text-muted-foreground text-xs">Hourly Rate</p>
-            <p className="font-semibold">{formatCurrency(hourlyRate, settings.currency)}</p>
-          </div>
-          <div>
-            <p className="text-muted-foreground text-xs">{settings.unit === 'miles' ? 'Miles' : 'Kilometers'}</p>
-            <p className="font-semibold">{trip.miles}</p>
-          </div>
-          <div>
-            <p className="text-muted-foreground text-xs">Deductions</p>
-            <p className="font-semibold">{formatCurrency(deductions, settings.currency)}</p>
-          </div>
-        </CardContent>
-        <CardFooter className="p-2 bg-secondary/20 flex justify-between items-center">
-            <div className="text-left">
-                <p className="text-xs text-muted-foreground">Gross</p>
-                <p className="font-semibold text-green-500 text-sm">{formatCurrency(trip.grossEarnings, settings.currency)}</p>
+        <CardContent className="p-3 grid grid-cols-3 gap-x-2 text-sm">
+          {/* Column 1 */}
+          <div className="space-y-2">
+            <div>
+              <p className="text-muted-foreground text-xs">Duration</p>
+              <p className="font-semibold text-base">{durationFormatted}</p>
             </div>
-            <div className="text-center">
-                <p className="text-xs text-muted-foreground">Expenses</p>
-                <p className="font-semibold text-red-500 text-sm">{formatCurrency(totalExpenses, settings.currency)}</p>
+            <div>
+              <p className="text-muted-foreground text-xs">{settings.unit === 'miles' ? 'Miles' : 'Kilometers'}</p>
+              <p className="font-semibold text-base">{trip.miles}</p>
             </div>
-            <div className="text-right">
-                <p className="text-xs text-muted-foreground">Net</p>
+          </div>
+          {/* Column 2 */}
+          <div className="space-y-2">
+            <div>
+              <p className="text-muted-foreground text-xs">Gross</p>
+              <p className="font-semibold text-base text-green-500">{formatCurrency(trip.grossEarnings, settings.currency)}</p>
+            </div>
+            <div>
+              <p className="text-muted-foreground text-xs">Expenses</p>
+              <p className="font-semibold text-base text-red-500">{formatCurrency(totalExpenses, settings.currency)}</p>
+            </div>
+          </div>
+          {/* Column 3 */}
+          <div className="space-y-2 text-right">
+            <div>
+                <p className="text-muted-foreground text-xs">Net</p>
                 <p className={cn(
-                    "font-bold text-base",
+                    "font-bold text-lg",
                     net >= 0 ? 'text-green-400' : 'text-red-400'
                 )}>
                     {formatCurrency(net, settings.currency)}
                 </p>
             </div>
-        </CardFooter>
+            <div>
+              <p className="text-muted-foreground text-xs">Deduction</p>
+              <p className="font-semibold text-base">{formatCurrency(deductions, settings.currency)}</p>
+            </div>
+          </div>
+        </CardContent>
       </Card>
 
       <AlertDialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
