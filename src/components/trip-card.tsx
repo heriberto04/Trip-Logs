@@ -85,15 +85,15 @@ export function TripCard({ trip, onEdit }: TripCardProps) {
                         <p className="font-semibold text-base">{durationFormatted}</p>
                     </div>
                     <div>
-                        <p className="text-muted-foreground text-xs">{settings.unit === 'miles' ? 'Miles' : 'Kilometers'}</p>
-                        <p className="font-semibold text-base">{trip.miles}</p>
+                        <p className="text-muted-foreground text-xs">Deduction</p>
+                        <p className="font-semibold text-base">{formatCurrency(deductions, settings.currency)}</p>
                     </div>
                 </div>
                 {/* Column 2 */}
                 <div className="space-y-1">
                     <div>
-                        <p className="text-muted-foreground text-xs">Gross</p>
-                        <p className="font-semibold text-base text-green-500">{formatCurrency(trip.grossEarnings, settings.currency)}</p>
+                        <p className="text-muted-foreground text-xs">{settings.unit === 'miles' ? 'Miles' : 'Kilometers'}</p>
+                        <p className="font-semibold text-base">{trip.miles}</p>
                     </div>
                     <div>
                         <p className="text-muted-foreground text-xs">Expenses</p>
@@ -103,8 +103,8 @@ export function TripCard({ trip, onEdit }: TripCardProps) {
                 {/* Column 3 */}
                 <div className="space-y-1 text-right">
                     <div>
-                        <p className="text-muted-foreground text-xs">Deduction</p>
-                        <p className="font-semibold text-base">{formatCurrency(deductions, settings.currency)}</p>
+                        <p className="text-muted-foreground text-xs">Gross</p>
+                        <p className="font-semibold text-base text-green-500">{formatCurrency(trip.grossEarnings, settings.currency)}</p>
                     </div>
                     <div>
                         <p className="text-muted-foreground text-xs">Net</p>
