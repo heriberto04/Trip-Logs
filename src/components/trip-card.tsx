@@ -61,7 +61,10 @@ export function TripCard({ trip, onView, onEdit }: TripCardProps) {
         onClick={onView}
       >
         <CardHeader className="flex flex-row items-center justify-between p-2 bg-card">
-          <CardTitle className="text-lg font-headline">{formattedDate}</CardTitle>
+          <div className="flex items-center gap-4">
+            <CardTitle className="text-lg font-headline">{formattedDate}</CardTitle>
+            <p className="font-semibold text-base text-muted-foreground">{durationFormatted}</p>
+          </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="h-8 w-8" onClick={(e) => e.stopPropagation()}>
@@ -86,14 +89,10 @@ export function TripCard({ trip, onView, onEdit }: TripCardProps) {
                 {/* Left Column */}
                 <div className="space-y-2">
                     <div className="flex justify-between">
-                        <p className="text-muted-foreground text-xs">Duration</p>
-                        <p className="font-semibold text-base">{durationFormatted}</p>
-                    </div>
-                     <div className="flex justify-between">
                         <p className="text-muted-foreground text-xs">Miles</p>
                         <p className="font-semibold text-base">{trip.miles}</p>
                     </div>
-                    <div className="flex justify-between">
+                     <div className="flex justify-between">
                         <p className="text-muted-foreground text-xs">Deduction</p>
                         <p className="font-semibold text-base">{formatCurrency(deductions, settings.currency)}</p>
                     </div>
@@ -105,7 +104,7 @@ export function TripCard({ trip, onView, onEdit }: TripCardProps) {
                         <p className="text-muted-foreground text-xs">Gross</p>
                         <p className="font-semibold text-base text-green-500">{formatCurrency(trip.grossEarnings, settings.currency)}</p>
                     </div>
-                     <div className="flex justify-between">
+                    <div className="flex justify-between">
                         <p className="text-muted-foreground text-xs">Net</p>
                         <p className={cn("font-semibold text-base", net >= 0 ? 'text-green-400': 'text-red-400')}>{formatCurrency(net, settings.currency)}</p>
                     </div>
