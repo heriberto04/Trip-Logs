@@ -10,8 +10,14 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useVehicles } from '@/contexts/vehicles-context';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
+import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
+import { cn } from '@/lib/utils';
+import { CalendarIcon } from 'lucide-react';
+import { format, parse } from 'date-fns';
+import { Calendar } from './ui/calendar';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface UpdateOdometerDialogProps {
   isOpen: boolean;
@@ -21,6 +27,7 @@ interface UpdateOdometerDialogProps {
 const odometerSchema = z.object({
   vehicleId: z.string().min(1, 'Please select a vehicle.'),
   odometer: z.coerce.number().min(0, 'Odometer reading must be a positive number.'),
+  date: z.date({ required_error: "A date is required." }),
 });
 
 type OdometerFormData = z.infer<typeof odometerSchema>;
@@ -28,16 +35,33 @@ type OdometerFormData = z.infer<typeof odometerSchema>;
 export function UpdateOdometerDialog({ isOpen, setIsOpen }: UpdateOdometerDialogProps) {
   const { vehicles, updateVehicleOdometer, getVehicleById } = useVehicles();
   const { toast } = useToast();
+  const isMobile = useIsMobile();
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
   
   const form = useForm<OdometerFormData>({
     resolver: zodResolver(odometerSchema),
     defaultValues: {
         vehicleId: '',
         odometer: undefined,
+        date: new Date(),
     }
   });
 
   const selectedVehicleId = form.watch('vehicleId');
+
+  useEffect(() => {
+    if (isOpen) {
+        form.reset({
+            vehicleId: vehicles.length > 0 ? vehicles[0].id : '',
+            odometer: undefined,
+            date: new Date(),
+        });
+    }
+  }, [isOpen, vehicles, form]);
 
   useEffect(() => {
     if (selectedVehicleId) {
@@ -51,13 +75,14 @@ export function UpdateOdometerDialog({ isOpen, setIsOpen }: UpdateOdometerDialog
   }, [selectedVehicleId, getVehicleById, form]);
 
   const onSubmit = (data: OdometerFormData) => {
+    // The date is captured but not currently used in updateVehicleOdometer.
+    // This sets up for future functionality if odometer history is needed.
     updateVehicleOdometer(data.vehicleId, data.odometer);
     toast({
       title: "Odometer Updated",
       description: "The vehicle's odometer reading has been saved.",
     });
     setIsOpen(false);
-    form.reset();
   };
 
   return (
@@ -91,6 +116,53 @@ export function UpdateOdometerDialog({ isOpen, setIsOpen }: UpdateOdometerDialog
               )}
             />
             {form.formState.errors.vehicleId && <p className="text-red-500 text-xs">{form.formState.errors.vehicleId.message}</p>}
+          </div>
+          <div className="space-y-2">
+             <Label htmlFor="date">Date</Label>
+             <Controller
+              name="date"
+              control={form.control}
+              render={({ field }) => (
+                isMounted && isMobile ? (
+                  <Input 
+                    type="date"
+                    value={field.value ? format(field.value, 'yyyy-MM-dd') : ''}
+                    onChange={(e) => {
+                      if (e.target.value) {
+                        const date = parse(e.target.value, 'yyyy-MM-dd', new Date());
+                        field.onChange(date);
+                      } else {
+                        field.onChange(null);
+                      }
+                    }}
+                  />
+                ) : (
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "w-full justify-start text-left font-normal",
+                          !field.value && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0">
+                      <Calendar
+                        mode="single"
+                        selected={field.value}
+                        onSelect={field.onChange}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                )
+              )}
+            />
+            {form.formState.errors.date && <p className="text-red-500 text-xs">{form.formState.errors.date.message}</p>}
           </div>
           <div className="space-y-2">
             <Label htmlFor="odometer">Odometer</Label>
