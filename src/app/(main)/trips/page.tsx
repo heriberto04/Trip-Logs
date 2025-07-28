@@ -5,7 +5,7 @@ import React, { useState, useMemo, useCallback } from 'react';
 import { useTrips } from '@/contexts/trips-context';
 import { TripCard } from '@/components/trip-card';
 import { Button } from '@/components/ui/button';
-import { Plus } from 'lucide-react';
+import { Plus, Gauge } from 'lucide-react';
 import { AddTripSheet } from '@/components/add-trip-sheet';
 import type { Trip } from '@/lib/types';
 import { ViewTripDialog } from '@/components/view-trip-dialog';
@@ -51,6 +51,14 @@ export default function TripsPage() {
         description: "The trip has been permanently removed.",
     });
   }, [deleteTrip, toast]);
+  
+  const handleOdometerClick = useCallback(() => {
+    // Placeholder for future functionality
+    toast({
+      title: "Odometer Feature",
+      description: "This feature is coming soon!",
+    });
+  }, [toast]);
 
   return (
     <div className="container mx-auto p-4">
@@ -72,6 +80,15 @@ export default function TripsPage() {
           ))}
         </div>
       )}
+      
+      <Button
+        onClick={handleOdometerClick}
+        className="fixed bottom-24 left-6 w-16 h-16 rounded-full shadow-lg p-0 flex items-center justify-center"
+        aria-label="Odometer"
+        variant="outline"
+      >
+        <Gauge className="w-8 h-8" />
+      </Button>
 
       <Button
         onClick={handleAddTrip}
