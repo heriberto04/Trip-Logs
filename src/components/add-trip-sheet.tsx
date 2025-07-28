@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { CalendarIcon, Gauge } from 'lucide-react';
+import { CalendarIcon } from 'lucide-react';
 import { Calendar } from '@/components/ui/calendar';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { format, parse } from 'date-fns';
@@ -17,9 +17,8 @@ import { useTrips } from '@/contexts/trips-context';
 import { useVehicles } from '@/contexts/vehicles-context';
 import type { Trip } from '@/lib/types';
 import { cn } from '@/lib/utils';
-import { useEffect, useState, useCallback, useMemo } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { Switch } from './ui/switch';
 
 interface AddTripSheetProps {
   isOpen: boolean;
@@ -31,9 +30,7 @@ const tripSchema = z.object({
   date: z.date({ required_error: "A date is required." }),
   startTime: z.string().min(1, 'Start time is required'),
   endTime: z.string().min(1, 'End time is required'),
-  miles: z.coerce.number().min(0).optional(),
-  odometerStart: z.coerce.number().min(0).optional(),
-  odometerEnd: z.coerce.number().min(0).optional(),
+  miles: z.coerce.number().min(0.1, 'Miles are required'),
   grossEarnings: z.coerce.number().min(0).optional(),
   expenses: z.object({
     gasoline: z.coerce.number().min(0).optional(),
@@ -47,10 +44,9 @@ type TripFormData = z.infer<typeof tripSchema>;
 
 export function AddTripSheet({ isOpen, setIsOpen, trip }: AddTripSheetProps) {
   const { addTrip, updateTrip } = useTrips();
-  const { vehicles, getVehicleById } = useVehicles();
+  const { vehicles } = useVehicles();
   const isMobile = useIsMobile();
   const [isMounted, setIsMounted] = useState(false);
-  const [useOdometer, setUseOdometer] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
@@ -63,22 +59,11 @@ export function AddTripSheet({ isOpen, setIsOpen, trip }: AddTripSheetProps) {
       startTime: '',
       endTime: '',
       miles: undefined,
-      odometerStart: undefined,
-      odometerEnd: undefined,
       grossEarnings: undefined,
       expenses: { gasoline: undefined, food: undefined, tolls: undefined },
       vehicleId: null,
     },
   });
-  
-  const selectedVehicleId = form.watch('vehicleId');
-  const odometerStartValue = form.watch('odometerStart');
-  const odometerEndValue = form.watch('odometerEnd');
-
-  const selectedVehicle = useMemo(() => {
-    return selectedVehicleId ? getVehicleById(selectedVehicleId) : null;
-  }, [selectedVehicleId, getVehicleById]);
-
 
   useEffect(() => {
     if (trip) {
@@ -86,55 +71,35 @@ export function AddTripSheet({ isOpen, setIsOpen, trip }: AddTripSheetProps) {
         date: new Date(trip.date),
         startTime: trip.startTime,
         endTime: trip.endTime,
-        miles: trip.miles || undefined,
-        odometerStart: trip.odometerStart || undefined,
-        odometerEnd: trip.odometerEnd || undefined,
-        grossEarnings: trip.grossEarnings || undefined,
-        expenses: {
-            gasoline: trip.expenses.gasoline || undefined,
-            food: trip.expenses.food || undefined,
-            tolls: trip.expenses.tolls || undefined,
-        },
+        miles: trip.miles,
+        grossEarnings: trip.grossEarnings,
+        expenses: trip.expenses,
         vehicleId: trip.vehicleId,
       });
-      setUseOdometer(!!trip.odometerStart);
     } else {
-      const defaultVehicleId = vehicles.length > 0 ? vehicles[0].id : null;
+       const defaultVehicleId = vehicles.length > 0 ? vehicles[0].id : null;
       form.reset({
         date: new Date(),
         startTime: '',
         endTime: '',
         miles: undefined,
-        odometerStart: undefined,
-        odometerEnd: undefined,
         grossEarnings: undefined,
         expenses: { gasoline: undefined, food: undefined, tolls: undefined },
         vehicleId: defaultVehicleId,
       });
-      setUseOdometer(false);
     }
   }, [trip, form, isOpen, vehicles]);
 
-   useEffect(() => {
-    if (useOdometer && odometerStartValue && odometerEndValue && odometerEndValue > odometerStartValue) {
-      form.setValue('miles', odometerEndValue - odometerStartValue, { shouldValidate: true });
-    }
-  }, [odometerStartValue, odometerEndValue, useOdometer, form]);
-
   const onSubmit = useCallback((data: TripFormData) => {
-    const { odometerStart, odometerEnd, ...restOfData } = data;
     const tripData = {
-      ...restOfData,
+      ...data,
       date: format(data.date, 'yyyy-MM-dd'),
-      miles: data.miles || 0,
       grossEarnings: data.grossEarnings || 0,
       expenses: {
-          gasoline: data.expenses.gasoline || 0,
-          food: data.expenses.food || 0,
-          tolls: data.expenses.tolls || 0,
+        gasoline: data.expenses.gasoline || 0,
+        tolls: data.expenses.tolls || 0,
+        food: data.expenses.food || 0,
       },
-      odometerStart: useOdometer ? data.odometerStart || null : null,
-      odometerEnd: useOdometer ? data.odometerEnd || null : null,
     };
 
     if (trip) {
@@ -144,7 +109,7 @@ export function AddTripSheet({ isOpen, setIsOpen, trip }: AddTripSheetProps) {
     }
     setIsOpen(false);
     form.reset();
-  }, [addTrip, updateTrip, trip, setIsOpen, form, useOdometer]);
+  }, [addTrip, updateTrip, trip, setIsOpen, form]);
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -239,38 +204,16 @@ export function AddTripSheet({ isOpen, setIsOpen, trip }: AddTripSheetProps) {
               )}
             />
           </div>
-          
-          <div className="space-y-3 rounded-lg border p-3">
-              <div className='flex items-center justify-between'>
-                  <Label htmlFor="use-odometer" className="flex items-center gap-2">
-                      <Gauge className="w-4 h-4" />
-                      Track with Odometer
-                  </Label>
-                  <Switch id="use-odometer" checked={useOdometer} onCheckedChange={setUseOdometer} disabled={!selectedVehicleId} />
-              </div>
 
-              {useOdometer && (
-                  <div className="grid grid-cols-2 gap-4 pt-2">
-                       <div className="space-y-2">
-                          <Label htmlFor="odometerStart">Odometer Start</Label>
-                          <Input id="odometerStart" type="number" placeholder={selectedVehicle?.odometer?.toString() ?? '0'} {...form.register('odometerStart')} />
-                      </div>
-                      <div className="space-y-2">
-                          <Label htmlFor="odometerEnd">Odometer End</Label>
-                          <Input id="odometerEnd" type="number" placeholder="0" {...form.register('odometerEnd')} />
-                      </div>
-                  </div>
-              )}
-          </div>
-          
           <div className="space-y-2">
-            <Label htmlFor="miles">Distance ({useOdometer ? 'Auto' : 'Manual'})</Label>
-            <Input id="miles" type="number" step="0.01" placeholder="0" {...form.register('miles')} disabled={useOdometer} />
+            <Label htmlFor="miles">Distance</Label>
+            <Input id="miles" type="number" step="0.01" {...form.register('miles')} />
+             {form.formState.errors.miles && <p className="text-red-500 text-xs">{form.formState.errors.miles.message}</p>}
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="grossEarnings">Gross Earnings</Label>
-            <Input id="grossEarnings" type="number" step="0.01" placeholder="0" {...form.register('grossEarnings')} />
+            <Input id="grossEarnings" type="number" step="0.01" {...form.register('grossEarnings')} />
           </div>
 
           <div className="space-y-2">
@@ -278,15 +221,15 @@ export function AddTripSheet({ isOpen, setIsOpen, trip }: AddTripSheetProps) {
             <div className="grid grid-cols-3 gap-2">
                 <div className="space-y-1">
                     <Label htmlFor="gasoline" className="text-xs">Gasoline</Label>
-                    <Input id="gasoline" type="number" step="0.01" placeholder="0" {...form.register('expenses.gasoline')} />
+                    <Input id="gasoline" type="number" step="0.01" {...form.register('expenses.gasoline')} />
                 </div>
                 <div className="space-y-1">
                     <Label htmlFor="food" className="text-xs">Food</Label>
-                    <Input id="food" type="number" step="0.01" placeholder="0" {...form.register('expenses.food')} />
+                    <Input id="food" type="number" step="0.01" {...form.register('expenses.food')} />
                 </div>
-                <div className="space-y-1">
+                 <div className="space-y-1">
                     <Label htmlFor="tolls" className="text-xs">Tolls</Label>
-                    <Input id="tolls" type="number" step="0.01" placeholder="0" {...form.register('expenses.tolls')} />
+                    <Input id="tolls" type="number" step="0.01" {...form.register('expenses.tolls')} />
                 </div>
             </div>
           </div>

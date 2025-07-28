@@ -9,7 +9,7 @@ import { useVehicles } from './vehicles-context';
 
 interface TripsContextType {
   trips: Trip[];
-  addTrip: (trip: Omit<Trip, 'id' | 'odometerStart' | 'odometerEnd'>) => void;
+  addTrip: (trip: Omit<Trip, 'id'>) => void;
   updateTrip: (trip: Trip) => void;
   deleteTrip: (id: string) => void;
   getTripsByYear: (year: number) => Trip[];
@@ -22,10 +22,9 @@ export function TripsProvider({ children }: { children: ReactNode }) {
   const [trips, setTrips, isReady] = useLocalStorage<Trip[]>('trips', []);
   const { vehicles, updateVehicleOdometer, getVehicleById } = useVehicles();
 
-  const addTrip = (trip: Omit<Trip, 'id' | 'odometerStart' | 'odometerEnd'>) => {
+  const addTrip = (trip: Omit<Trip, 'id'>) => {
     let odometerStart: number | null = null;
     let odometerEnd: number | null = null;
-    let calculatedMiles = trip.miles;
 
     if (trip.vehicleId) {
         const vehicle = getVehicleById(trip.vehicleId);
@@ -36,7 +35,7 @@ export function TripsProvider({ children }: { children: ReactNode }) {
 
             odometerStart = lastTripWithVehicle ? lastTripWithVehicle.odometerEnd : vehicle.odometer;
             
-            if (trip.miles > 0 && odometerStart) {
+            if (trip.miles > 0 && odometerStart !== null) {
                 odometerEnd = odometerStart + trip.miles;
                 updateVehicleOdometer(trip.vehicleId, odometerEnd);
             }
@@ -46,29 +45,16 @@ export function TripsProvider({ children }: { children: ReactNode }) {
     const newTrip: Trip = {
       ...trip,
       id: uuidv4(),
-      odometerStart,
-      odometerEnd,
-      miles: calculatedMiles,
+      odometerStart: trip.odometerStart ?? odometerStart,
+      odometerEnd: trip.odometerEnd ?? odometerEnd,
     };
     
     setTrips(prevTrips => [newTrip, ...prevTrips]);
   };
 
   const updateTrip = (updatedTrip: Trip) => {
-    let finalTrip = { ...updatedTrip };
-
-    if (updatedTrip.odometerStart !== null && updatedTrip.odometerEnd !== null && (updatedTrip.odometerEnd > updatedTrip.odometerStart)) {
-      finalTrip.miles = updatedTrip.odometerEnd - updatedTrip.odometerStart;
-    } else if (updatedTrip.vehicleId && updatedTrip.odometerStart !== null && updatedTrip.miles > 0) {
-        finalTrip.odometerEnd = updatedTrip.odometerStart + updatedTrip.miles;
-    }
-
-    if (finalTrip.vehicleId && finalTrip.odometerEnd) {
-        updateVehicleOdometer(finalTrip.vehicleId, finalTrip.odometerEnd);
-    }
-    
     setTrips(prevTrips =>
-      prevTrips.map(trip => (trip.id === finalTrip.id ? finalTrip : trip))
+      prevTrips.map(trip => (trip.id === updatedTrip.id ? updatedTrip : trip))
     );
   };
 
