@@ -100,11 +100,11 @@ export async function generatePdf(
         formatCurrency(item.grossEarnings, settings.currency),
         formatCurrency(totalExpenses, settings.currency),
         formatCurrency(net, settings.currency),
-        vehicle ? `${vehicle.make} ${vehicle.model}` : 'N/A',
+        vehicle ? `${vehicle.year} ${vehicle.make} ${vehicle.model}` : 'N/A',
         `${item.odometerStart?.toLocaleString() ?? 'N/A'} - ${item.odometerEnd?.toLocaleString() ?? 'N/A'}`
       ];
     } else { // Odometer reading
-      const vehicleName = vehicle ? `${vehicle.make} ${vehicle.model}` : 'N/A';
+      const vehicleName = vehicle ? `${vehicle.year} ${vehicle.make} ${vehicle.model}` : 'N/A';
       const odometerText = `Odometer Update: ${item.odometer.toLocaleString()} for ${vehicleName}`;
       return [
         formattedDate,
