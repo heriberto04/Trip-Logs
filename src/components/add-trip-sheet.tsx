@@ -46,11 +46,18 @@ export function AddTripSheet({ isOpen, setIsOpen, trip }: AddTripSheetProps) {
   const { addTrip, updateTrip } = useTrips();
   const { vehicles } = useVehicles();
   const isMobile = useIsMobile();
-  const [isMounted, setIsMounted] = useState(false);
+  const [renderMobileDateInput, setRenderMobileDateInput] = useState(false);
 
   useEffect(() => {
-    setIsMounted(true);
-  }, []);
+    if (isOpen && isMobile) {
+      // Delay rendering the input to prevent iOS from auto-focusing it
+      const timer = setTimeout(() => setRenderMobileDateInput(true), 150);
+      return () => clearTimeout(timer);
+    }
+    if (!isOpen) {
+      setRenderMobileDateInput(false);
+    }
+  }, [isOpen, isMobile]);
 
   const form = useForm<TripFormData>({
     resolver: zodResolver(tripSchema),
@@ -127,7 +134,7 @@ export function AddTripSheet({ isOpen, setIsOpen, trip }: AddTripSheetProps) {
               name="date"
               control={form.control}
               render={({ field }) => (
-                isMounted && isMobile ? (
+                renderMobileDateInput ? (
                   <Input 
                     type="date"
                     value={field.value ? format(field.value, 'yyyy-MM-dd') : ''}
