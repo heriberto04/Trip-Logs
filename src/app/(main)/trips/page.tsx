@@ -75,7 +75,7 @@ export default function TripsPage() {
 
       <Button
         onClick={handleAddTrip}
-        className="fixed bottom-20 left-1/2 -translate-x-1/2 w-16 h-16 rounded-full shadow-lg p-0 flex items-center justify-center"
+        className="fixed bottom-24 right-6 w-16 h-16 rounded-full shadow-lg p-0 flex items-center justify-center"
         aria-label="Add new trip"
       >
         <Plus className="w-12 h-12" />
