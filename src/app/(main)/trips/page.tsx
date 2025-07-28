@@ -9,6 +9,7 @@ import { Plus, Gauge } from 'lucide-react';
 import { AddTripSheet } from '@/components/add-trip-sheet';
 import type { Trip } from '@/lib/types';
 import { ViewTripDialog } from '@/components/view-trip-dialog';
+import { UpdateOdometerDialog } from '@/components/update-odometer-dialog';
 import { useToast } from '@/hooks/use-toast';
 
 export default function TripsPage() {
@@ -19,6 +20,8 @@ export default function TripsPage() {
 
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
   const [viewingTrip, setViewingTrip] = useState<Trip | null>(null);
+  
+  const [isOdometerDialogOpen, setIsOdometerDialogOpen] = useState(false);
 
   const currentYear = new Date().getFullYear();
   const currentYearTrips = useMemo(() => {
@@ -53,12 +56,8 @@ export default function TripsPage() {
   }, [deleteTrip, toast]);
   
   const handleOdometerClick = useCallback(() => {
-    // Placeholder for future functionality
-    toast({
-      title: "Odometer Feature",
-      description: "This feature is coming soon!",
-    });
-  }, [toast]);
+    setIsOdometerDialogOpen(true);
+  }, []);
 
   return (
     <div className="container mx-auto p-4">
@@ -83,18 +82,18 @@ export default function TripsPage() {
       
       <Button
         onClick={handleOdometerClick}
-        className="fixed bottom-24 left-6 w-16 h-10 rounded-full shadow-lg p-0 flex items-center justify-center"
+        className="fixed bottom-24 left-6 w-16 h-16 rounded-full shadow-lg p-0 flex items-center justify-center"
         aria-label="Odometer"
       >
-        <Gauge className="w-20 h-20" />
+        <Gauge className="w-8 h-8" />
       </Button>
 
       <Button
         onClick={handleAddTrip}
-        className="fixed bottom-24 right-6 w-16 h-10 rounded-full shadow-lg p-0 flex items-center justify-center"
+        className="fixed bottom-24 right-6 w-16 h-16 rounded-full shadow-lg p-0 flex items-center justify-center"
         aria-label="Add new trip"
       >
-        <Plus className="w-20 h-20" />
+        <Plus className="w-8 h-8" />
       </Button>
 
       <AddTripSheet
@@ -103,12 +102,17 @@ export default function TripsPage() {
         trip={editingTrip}
       />
       
-      <ViewTripDialog
+       <ViewTripDialog
         isOpen={isViewDialogOpen}
         setIsOpen={setIsViewDialogOpen}
         trip={viewingTrip}
         onEdit={handleEditTrip}
         onDelete={handleDeleteTrip}
+      />
+
+      <UpdateOdometerDialog
+        isOpen={isOdometerDialogOpen}
+        setIsOpen={setIsOdometerDialogOpen}
       />
     </div>
   );

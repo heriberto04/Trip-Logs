@@ -19,6 +19,7 @@ const vehicleSchema = z.object({
   make: z.string().optional().default(''),
   model: z.string().optional().default(''),
   licensePlate: z.string().optional().default(''),
+  odometer: z.coerce.number().optional().nullable(),
 });
 
 type VehicleFormData = z.infer<typeof vehicleSchema>;
@@ -60,6 +61,10 @@ export function AddVehicleDialog({ isOpen, setIsOpen }: AddVehicleDialogProps) {
           <div className="space-y-2">
             <Label htmlFor="licensePlate">License Plate</Label>
             <Input id="licensePlate" {...register('licensePlate')} />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="odometer">Odometer</Label>
+            <Input id="odometer" type="number" {...register('odometer')} />
           </div>
           <DialogFooter>
             <Button type="submit">Save Vehicle</Button>

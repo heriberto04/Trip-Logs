@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 interface VehiclesContextType {
   vehicles: Vehicle[];
   addVehicle: (vehicle: Omit<Vehicle, 'id'>) => void;
+  updateVehicleOdometer: (id: string, odometer: number) => void;
   deleteVehicle: (id: string) => void;
   getVehicleById: (id: string) => Vehicle | undefined;
   isReady: boolean;
@@ -20,8 +21,12 @@ export function VehiclesProvider({ children }: { children: ReactNode }) {
   const [vehicles, setVehicles, isReady] = useLocalStorage<Vehicle[]>('vehicles', []);
 
   const addVehicle = (vehicle: Omit<Vehicle, 'id'>) => {
-    const newVehicle = { ...vehicle, id: uuidv4() };
+    const newVehicle = { ...vehicle, id: uuidv4(), odometer: vehicle.odometer || null };
     setVehicles(prev => [...prev, newVehicle]);
+  };
+
+  const updateVehicleOdometer = (id: string, odometer: number) => {
+    setVehicles(prev => prev.map(v => (v.id === id ? { ...v, odometer } : v)));
   };
 
   const deleteVehicle = (id: string) => {
@@ -33,7 +38,7 @@ export function VehiclesProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <VehiclesContext.Provider value={{ vehicles, addVehicle, deleteVehicle, getVehicleById, isReady }}>
+    <VehiclesContext.Provider value={{ vehicles, addVehicle, updateVehicleOdometer, deleteVehicle, getVehicleById, isReady }}>
       {children}
     </VehiclesContext.Provider>
   );

@@ -19,6 +19,7 @@ export interface Vehicle {
   make: string;
   model: string;
   licensePlate: string;
+  odometer: number | null;
 }
 
 export interface AppSettings {
