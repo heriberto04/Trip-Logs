@@ -93,10 +93,3 @@ export function ViewTripDialog({ isOpen, setIsOpen, trip, onEdit, onDelete }: Vi
     </Dialog>
   );
 }
-
-// A new variant for destructive outline button
-declare module '@/components/ui/button' {
-  interface ButtonProps {
-    variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link" | "destructive-outline";
-  }
-}
