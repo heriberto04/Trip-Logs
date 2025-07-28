@@ -7,6 +7,7 @@ import type { UserInfo } from '@/lib/types';
 interface UserInfoContextType {
   userInfo: UserInfo;
   setUserInfo: React.Dispatch<React.SetStateAction<UserInfo>>;
+  isReady: boolean;
 }
 
 const defaultUserInfo: UserInfo = {
@@ -20,10 +21,10 @@ const defaultUserInfo: UserInfo = {
 const UserInfoContext = createContext<UserInfoContextType | undefined>(undefined);
 
 export function UserInfoProvider({ children }: { children: ReactNode }) {
-  const [userInfo, setUserInfo] = useLocalStorage<UserInfo>('userInfo', defaultUserInfo);
+  const [userInfo, setUserInfo, isReady] = useLocalStorage<UserInfo>('userInfo', defaultUserInfo);
 
   return (
-    <UserInfoContext.Provider value={{ userInfo, setUserInfo }}>
+    <UserInfoContext.Provider value={{ userInfo, setUserInfo, isReady }}>
       {children}
     </UserInfoContext.Provider>
   );

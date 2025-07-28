@@ -1,4 +1,4 @@
-// src/contexts/trips-context.tsx
+
 "use client";
 
 import React, { createContext, useContext, ReactNode } from 'react';
@@ -12,12 +12,13 @@ interface TripsContextType {
   updateTrip: (trip: Trip) => void;
   deleteTrip: (id: string) => void;
   getTripsByYear: (year: number) => Trip[];
+  isReady: boolean;
 }
 
 const TripsContext = createContext<TripsContextType | undefined>(undefined);
 
 export function TripsProvider({ children }: { children: ReactNode }) {
-  const [trips, setTrips] = useLocalStorage<Trip[]>('trips', []);
+  const [trips, setTrips, isReady] = useLocalStorage<Trip[]>('trips', []);
 
   const addTrip = (trip: Omit<Trip, 'id'>) => {
     const newTrip = { ...trip, id: uuidv4() };
@@ -39,7 +40,7 @@ export function TripsProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <TripsContext.Provider value={{ trips, addTrip, updateTrip, deleteTrip, getTripsByYear }}>
+    <TripsContext.Provider value={{ trips, addTrip, updateTrip, deleteTrip, getTripsByYear, isReady }}>
       {children}
     </TripsContext.Provider>
   );

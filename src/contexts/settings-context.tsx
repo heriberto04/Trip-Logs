@@ -7,6 +7,7 @@ import type { AppSettings } from '@/lib/types';
 interface SettingsContextType {
   settings: AppSettings;
   setSettings: React.Dispatch<React.SetStateAction<AppSettings>>;
+  isReady: boolean;
 }
 
 const defaultSettings: AppSettings = {
@@ -18,10 +19,10 @@ const defaultSettings: AppSettings = {
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
 
 export function SettingsProvider({ children }: { children: ReactNode }) {
-  const [settings, setSettings] = useLocalStorage<AppSettings>('settings', defaultSettings);
+  const [settings, setSettings, isReady] = useLocalStorage<AppSettings>('settings', defaultSettings);
 
   return (
-    <SettingsContext.Provider value={{ settings, setSettings }}>
+    <SettingsContext.Provider value={{ settings, setSettings, isReady }}>
       {children}
     </SettingsContext.Provider>
   );

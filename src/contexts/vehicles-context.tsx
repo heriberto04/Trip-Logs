@@ -10,12 +10,13 @@ interface VehiclesContextType {
   addVehicle: (vehicle: Omit<Vehicle, 'id'>) => void;
   deleteVehicle: (id: string) => void;
   getVehicleById: (id: string) => Vehicle | undefined;
+  isReady: boolean;
 }
 
 const VehiclesContext = createContext<VehiclesContextType | undefined>(undefined);
 
 export function VehiclesProvider({ children }: { children: ReactNode }) {
-  const [vehicles, setVehicles] = useLocalStorage<Vehicle[]>('vehicles', []);
+  const [vehicles, setVehicles, isReady] = useLocalStorage<Vehicle[]>('vehicles', []);
 
   const addVehicle = (vehicle: Omit<Vehicle, 'id'>) => {
     const newVehicle = { ...vehicle, id: uuidv4() };
@@ -31,7 +32,7 @@ export function VehiclesProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <VehiclesContext.Provider value={{ vehicles, addVehicle, deleteVehicle, getVehicleById }}>
+    <VehiclesContext.Provider value={{ vehicles, addVehicle, deleteVehicle, getVehicleById, isReady }}>
       {children}
     </VehiclesContext.Provider>
   );

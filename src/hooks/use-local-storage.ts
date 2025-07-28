@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react';
 
-export function useLocalStorage<T>(key: string, defaultValue: T): [T, React.Dispatch<React.SetStateAction<T>>] {
+type UseLocalStorageReturn<T> = [T, React.Dispatch<React.SetStateAction<T>>, boolean];
+
+export function useLocalStorage<T>(key: string, defaultValue: T): UseLocalStorageReturn<T> {
   const [value, setValue] = useState<T>(defaultValue);
+  const [isReady, setIsReady] = useState(false);
 
   // This effect will only run on the client, after the initial render.
   useEffect(() => {
@@ -12,18 +15,22 @@ export function useLocalStorage<T>(key: string, defaultValue: T): [T, React.Disp
       }
     } catch (error) {
       console.error(error);
+    } finally {
+        setIsReady(true);
     }
   }, [key]);
 
   useEffect(() => {
     // This effect ensures we only write to localStorage on the client
     // and when the value is not the initial default.
-    try {
-        window.localStorage.setItem(key, JSON.stringify(value));
-    } catch (error) {
-        console.error(`Error writing to localStorage for key "${key}":`, error);
+    if(isReady){
+        try {
+            window.localStorage.setItem(key, JSON.stringify(value));
+        } catch (error) {
+            console.error(`Error writing to localStorage for key "${key}":`, error);
+        }
     }
-  }, [key, value]);
+  }, [key, value, isReady]);
 
-  return [value, setValue];
+  return [value, setValue, isReady];
 }
