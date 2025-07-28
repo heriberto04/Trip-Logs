@@ -104,15 +104,11 @@ export async function generatePdf(
         `${item.odometerStart?.toLocaleString() ?? 'N/A'} - ${item.odometerEnd?.toLocaleString() ?? 'N/A'}`
       ];
     } else { // Odometer reading
+      const vehicleName = vehicle ? `${vehicle.make} ${vehicle.model}` : 'N/A';
+      const odometerText = `Odometer Update: ${item.odometer.toLocaleString()} for ${vehicleName}`;
       return [
         formattedDate,
-        { content: 'Odometer Update', colSpan: 5, styles: { fontStyle: 'italic', textColor: [100, 100, 100]} },
-        '',
-        '',
-        '',
-        '',
-        vehicle ? `${vehicle.make} ${vehicle.model}` : 'N/A',
-        item.odometer.toLocaleString()
+        { content: odometerText, colSpan: 7, styles: { fontStyle: 'italic', textColor: [100, 100, 100]} },
       ];
     }
   });
