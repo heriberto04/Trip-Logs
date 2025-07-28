@@ -14,7 +14,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useOdometer } from '@/contexts/odometer-context';
 import { OdometerCard } from '@/components/odometer-card';
 
-typeTimelineItem = (Trip & { type: 'trip' }) | (OdometerReading & { type: 'odometer' });
+type TimelineItem = (Trip & { type: 'trip' }) | (OdometerReading & { type: 'odometer' });
 
 export default function TripsPage() {
   const { trips, deleteTrip } = useTrips();
