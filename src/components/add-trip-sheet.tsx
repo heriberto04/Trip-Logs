@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useForm, Controller } from 'react-hook-form';
@@ -16,7 +17,7 @@ import { useTrips } from '@/contexts/trips-context';
 import { useVehicles } from '@/contexts/vehicles-context';
 import type { Trip } from '@/lib/types';
 import { cn } from '@/lib/utils';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 interface AddTripSheetProps {
@@ -93,7 +94,7 @@ export function AddTripSheet({ isOpen, setIsOpen, trip }: AddTripSheetProps) {
   }, [trip, form, isOpen, vehicles]);
 
 
-  const onSubmit = (data: TripFormData) => {
+  const onSubmit = useCallback((data: TripFormData) => {
     const tripData = {
       ...data,
       date: format(data.date, 'yyyy-MM-dd'),
@@ -112,7 +113,7 @@ export function AddTripSheet({ isOpen, setIsOpen, trip }: AddTripSheetProps) {
     }
     setIsOpen(false);
     form.reset();
-  };
+  }, [addTrip, updateTrip, trip, setIsOpen, form]);
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
