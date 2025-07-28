@@ -56,7 +56,7 @@ export default function SettingsPage() {
       
       <Accordion type="multiple" className="w-full space-y-4">
         {/* User Information */}
-        <AccordionItem value="user-info">
+        <AccordionItem value="user-info" className="border-b-0">
           <AccordionTrigger className="text-xl font-semibold p-4 bg-card rounded-lg">User Information</AccordionTrigger>
           <AccordionContent className="p-4 space-y-4">
             <div className="space-y-2">
@@ -85,7 +85,7 @@ export default function SettingsPage() {
         </AccordionItem>
 
         {/* Vehicles */}
-        <AccordionItem value="vehicles">
+        <AccordionItem value="vehicles" className="border-b-0">
           <AccordionTrigger className="text-xl font-semibold p-4 bg-card rounded-lg">Vehicles</AccordionTrigger>
           <AccordionContent className="p-4 space-y-4">
             {vehicles.map(v => (
@@ -105,7 +105,7 @@ export default function SettingsPage() {
         </AccordionItem>
 
         {/* Export PDF */}
-        <AccordionItem value="export-pdf">
+        <AccordionItem value="export-pdf" className="border-b-0">
           <AccordionTrigger className="text-xl font-semibold p-4 bg-card rounded-lg">Export PDF</AccordionTrigger>
           <AccordionContent className="p-4 space-y-4">
             <div className="space-y-2">
@@ -129,7 +129,7 @@ export default function SettingsPage() {
         </AccordionItem>
 
         {/* App Settings */}
-        <AccordionItem value="app-settings">
+        <AccordionItem value="app-settings" className="border-b-0">
           <AccordionTrigger className="text-xl font-semibold p-4 bg-card rounded-lg">App Settings</AccordionTrigger>
           <AccordionContent className="p-4 space-y-4">
             <div className="flex items-center justify-between">
@@ -155,7 +155,7 @@ export default function SettingsPage() {
         </AccordionItem>
         
         {/* About */}
-        <AccordionItem value="about">
+        <AccordionItem value="about" className="border-b-0">
           <AccordionTrigger className="text-xl font-semibold p-4 bg-card rounded-lg">About Trip Logs</AccordionTrigger>
           <AccordionContent className="p-4 space-y-4 text-muted-foreground">
             <h3 className="font-semibold text-foreground">App Description</h3>
