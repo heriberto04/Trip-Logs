@@ -87,7 +87,7 @@ export default function TripsPage() {
         aria-label="Odometer"
         variant="outline"
       >
-        <Gauge className="w-8 h-8" />
+        <Gauge className="w-12 h-12" />
       </Button>
 
       <Button
