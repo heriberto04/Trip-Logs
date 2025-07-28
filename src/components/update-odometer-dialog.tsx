@@ -18,6 +18,7 @@ import { CalendarIcon } from 'lucide-react';
 import { format, parse } from 'date-fns';
 import { Calendar } from './ui/calendar';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useOdometer } from '@/contexts/odometer-context';
 
 interface UpdateOdometerDialogProps {
   isOpen: boolean;
@@ -34,6 +35,7 @@ type OdometerFormData = z.infer<typeof odometerSchema>;
 
 export function UpdateOdometerDialog({ isOpen, setIsOpen }: UpdateOdometerDialogProps) {
   const { vehicles, updateVehicleOdometer, getVehicleById } = useVehicles();
+  const { addOdometerReading } = useOdometer();
   const { toast } = useToast();
   const isMobile = useIsMobile();
   const [isMounted, setIsMounted] = useState(false);
@@ -75,12 +77,15 @@ export function UpdateOdometerDialog({ isOpen, setIsOpen }: UpdateOdometerDialog
   }, [selectedVehicleId, getVehicleById, form]);
 
   const onSubmit = (data: OdometerFormData) => {
-    // The date is captured but not currently used in updateVehicleOdometer.
-    // This sets up for future functionality if odometer history is needed.
+    addOdometerReading({
+        vehicleId: data.vehicleId,
+        odometer: data.odometer,
+        date: format(data.date, 'yyyy-MM-dd')
+    });
     updateVehicleOdometer(data.vehicleId, data.odometer);
     toast({
-      title: "Odometer Updated",
-      description: "The vehicle's odometer reading has been saved.",
+      title: "Odometer Reading Saved",
+      description: "The new odometer reading has been recorded.",
     });
     setIsOpen(false);
   };
@@ -91,7 +96,7 @@ export function UpdateOdometerDialog({ isOpen, setIsOpen }: UpdateOdometerDialog
         <DialogHeader>
           <DialogTitle>Update Odometer</DialogTitle>
           <DialogDescription>
-            Select a vehicle and enter its current odometer reading.
+            Select a vehicle and enter its current odometer reading. This will create a new entry.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -170,7 +175,7 @@ export function UpdateOdometerDialog({ isOpen, setIsOpen }: UpdateOdometerDialog
             {form.formState.errors.odometer && <p className="text-red-500 text-xs">{form.formState.errors.odometer.message}</p>}
           </div>
           <DialogFooter>
-            <Button type="submit" disabled={vehicles.length === 0}>Save Odometer</Button>
+            <Button type="submit" disabled={vehicles.length === 0}>Save Reading</Button>
           </DialogFooter>
         </form>
       </DialogContent>

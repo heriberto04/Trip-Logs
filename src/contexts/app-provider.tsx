@@ -6,6 +6,7 @@ import { VehiclesProvider, useVehicles } from './vehicles-context';
 import { SettingsProvider, useSettings } from './settings-context';
 import { UserInfoProvider, useUserInfo } from './user-info-context';
 import Image from 'next/image';
+import { OdometerProvider, useOdometer } from './odometer-context';
 
 const AppLoadingContext = createContext<{ isReady: boolean }>({ isReady: false });
 
@@ -26,8 +27,9 @@ function AppStateGate({ children }: { children: React.ReactNode }) {
     const { isReady: userInfoReady } = useUserInfo();
     const { isReady: vehiclesReady } = useVehicles();
     const { isReady: tripsReady } = useTrips();
+    const { isReady: odometerReady } = useOdometer();
 
-    const isAppReady = settingsReady && userInfoReady && vehiclesReady && tripsReady;
+    const isAppReady = settingsReady && userInfoReady && vehiclesReady && tripsReady && odometerReady;
     
     const [showContent, setShowContent] = useState(false);
 
@@ -53,11 +55,13 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
     <SettingsProvider>
       <UserInfoProvider>
         <VehiclesProvider>
-          <TripsProvider>
-            <AppStateGate>
-              {children}
-            </AppStateGate>
-          </TripsProvider>
+          <OdometerProvider>
+            <TripsProvider>
+              <AppStateGate>
+                {children}
+              </AppStateGate>
+            </TripsProvider>
+          </OdometerProvider>
         </VehiclesProvider>
       </UserInfoProvider>
     </SettingsProvider>

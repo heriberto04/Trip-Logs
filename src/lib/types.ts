@@ -16,6 +16,14 @@ export interface Trip {
   vehicleId: string | null;
 }
 
+export interface OdometerReading {
+  id: string;
+  date: string; // yyyy-MM-dd
+  vehicleId: string;
+  odometer: number;
+}
+
+
 export interface Vehicle {
   id: string;
   year: number | null;

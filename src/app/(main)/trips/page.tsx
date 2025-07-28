@@ -7,13 +7,18 @@ import { TripCard } from '@/components/trip-card';
 import { Button } from '@/components/ui/button';
 import { Plus, Gauge } from 'lucide-react';
 import { AddTripSheet } from '@/components/add-trip-sheet';
-import type { Trip } from '@/lib/types';
+import type { Trip, OdometerReading } from '@/lib/types';
 import { ViewTripDialog } from '@/components/view-trip-dialog';
 import { UpdateOdometerDialog } from '@/components/update-odometer-dialog';
 import { useToast } from '@/hooks/use-toast';
+import { useOdometer } from '@/contexts/odometer-context';
+import { OdometerCard } from '@/components/odometer-card';
+
+typeTimelineItem = (Trip & { type: 'trip' }) | (OdometerReading & { type: 'odometer' });
 
 export default function TripsPage() {
   const { trips, deleteTrip } = useTrips();
+  const { odometerReadings } = useOdometer();
   const { toast } = useToast();
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [editingTrip, setEditingTrip] = useState<Trip | null>(null);
@@ -24,11 +29,22 @@ export default function TripsPage() {
   const [isOdometerDialogOpen, setIsOdometerDialogOpen] = useState(false);
 
   const currentYear = new Date().getFullYear();
-  const currentYearTrips = useMemo(() => {
-    return trips
+  
+  const timelineItems = useMemo(() => {
+    const currentYearTrips = trips
       .filter(trip => new Date(trip.date).getFullYear() === currentYear)
-      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-  }, [trips, currentYear]);
+      .map(trip => ({ ...trip, type: 'trip' as const }));
+
+    const currentYearOdometerReadings = odometerReadings
+      .filter(reading => new Date(reading.date).getFullYear() === currentYear)
+      .map(reading => ({ ...reading, type: 'odometer' as const }));
+
+    const combined = [...currentYearTrips, ...currentYearOdometerReadings];
+    
+    return combined.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+  }, [trips, odometerReadings, currentYear]);
+
 
   const handleAddTrip = useCallback(() => {
     setEditingTrip(null);
@@ -62,21 +78,31 @@ export default function TripsPage() {
   return (
     <div className="container mx-auto p-4">
       
-      {currentYearTrips.length === 0 ? (
+      {timelineItems.length === 0 ? (
         <div className="text-center mt-20 flex flex-col items-center">
             <p className="text-muted-foreground">No trips logged for {currentYear}.</p>
             <p className="text-muted-foreground">Tap the plus button to get started!</p>
         </div>
       ) : (
         <div className="space-y-4">
-          {currentYearTrips.map(trip => (
-            <TripCard 
-              key={trip.id} 
-              trip={trip} 
-              onView={() => handleViewTrip(trip)}
-              onEdit={() => handleEditTrip(trip)} 
-            />
-          ))}
+          {timelineItems.map(item => {
+            if(item.type === 'trip') {
+              return (
+                <TripCard 
+                  key={item.id} 
+                  trip={item} 
+                  onView={() => handleViewTrip(item)}
+                  onEdit={() => handleEditTrip(item)} 
+                />
+              )
+            }
+            if(item.type === 'odometer') {
+              return (
+                <OdometerCard key={item.id} reading={item} />
+              )
+            }
+            return null;
+          })}
         </div>
       )}
       
