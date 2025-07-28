@@ -42,8 +42,8 @@ export async function generatePdf(
     `Name: ${userInfo.name || 'N/A'}`,
     `Address: ${userInfo.address || 'N/A'}`,
     `City/State: ${userInfo.cityState || 'N/A'}`,
-    `Zip Code: ${userInfo.zipCode || 'N/A'}`,
     `Country: ${userInfo.country || 'N/A'}`,
+    `Zip Code: ${userInfo.zipCode || 'N/A'}`,
   ].join('\n');
   doc.text(userInfoText, 14, 52);
 
