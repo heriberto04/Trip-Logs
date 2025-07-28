@@ -174,7 +174,7 @@ export default function SettingsPage() {
       </p>
 
       <div className="flex justify-center mt-4">
-        <Image src="/icon.png" alt="Trip Logs Logo" width={64} height={64} />
+        <Image src="/icon.png" alt="Trip Logs Logo" width={128} height={128} />
       </div>
 
       <AddVehicleDialog isOpen={isAddVehicleOpen} setIsOpen={setIsAddVehicleOpen} />
