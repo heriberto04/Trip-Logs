@@ -10,7 +10,7 @@ interface jsPDFWithAutoTable extends jsPDF {
   autoTable: (options: any) => jsPDF;
 }
 
-export function generatePdf(
+export async function generatePdf(
   userInfo: UserInfo,
   trips: Trip[],
   settings: AppSettings,
@@ -18,6 +18,7 @@ export function generatePdf(
   year: string
 ) {
   const doc = new jsPDF() as jsPDFWithAutoTable;
+  const fileName = `Trip_Logs_Report_${year}.pdf`;
 
   // Header
   doc.setFontSize(22);
@@ -119,5 +120,23 @@ export function generatePdf(
     doc.text(`Trip Logs Report © ${year}`, 14, doc.internal.pageSize.height - 10);
   }
 
-  doc.save(`Trip_Logs_Report_${year}.pdf`);
+  const pdfBlob = doc.output('blob');
+  const pdfFile = new File([pdfBlob], fileName, { type: 'application/pdf' });
+
+  if (navigator.share && navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
+    try {
+      await navigator.share({
+        title: `Trip Logs Report ${year}`,
+        text: `Here is your trip log report for ${year}.`,
+        files: [pdfFile],
+      });
+    } catch (error) {
+      console.error('Error sharing PDF:', error);
+      // Fallback to download if sharing fails
+      doc.save(fileName);
+    }
+  } else {
+    // Fallback for browsers that don't support Web Share API for files
+    doc.save(fileName);
+  }
 }

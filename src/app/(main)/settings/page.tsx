@@ -1,3 +1,4 @@
+
 "use client";
 
 import React from 'react';
@@ -33,7 +34,7 @@ export default function SettingsPage() {
     return Array.from(years).sort((a,b) => Number(b) - Number(a));
   }, [trips]);
 
-  const handleExport = () => {
+  const handleExport = async () => {
     const yearData = trips.filter(t => new Date(t.date).getFullYear().toString() === exportYear);
     if(yearData.length === 0) {
       toast({
@@ -43,7 +44,7 @@ export default function SettingsPage() {
       });
       return;
     }
-    generatePdf(userInfo, yearData, settings, vehicles, exportYear);
+    await generatePdf(userInfo, yearData, settings, vehicles, exportYear);
     toast({
         title: "PDF Exported",
         description: `Your report for ${exportYear} has been generated.`,
