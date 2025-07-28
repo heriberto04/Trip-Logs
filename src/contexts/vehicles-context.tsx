@@ -5,6 +5,7 @@ import React, { createContext, useContext, ReactNode } from 'react';
 import { useLocalStorage } from '@/hooks/use-local-storage';
 import type { Vehicle } from '@/lib/types';
 import { v4 as uuidv4 } from 'uuid';
+import { useTrips } from './trips-context';
 
 interface VehiclesContextType {
   vehicles: Vehicle[];
@@ -19,6 +20,7 @@ const VehiclesContext = createContext<VehiclesContextType | undefined>(undefined
 
 export function VehiclesProvider({ children }: { children: ReactNode }) {
   const [vehicles, setVehicles, isReady] = useLocalStorage<Vehicle[]>('vehicles', []);
+  const { deleteTripsByVehicleId } = useTrips();
 
   const addVehicle = (vehicle: Omit<Vehicle, 'id'>) => {
     const newVehicle = { ...vehicle, id: uuidv4(), odometer: vehicle.odometer || null };
@@ -30,6 +32,7 @@ export function VehiclesProvider({ children }: { children: ReactNode }) {
   };
 
   const deleteVehicle = (id: string) => {
+    deleteTripsByVehicleId(id);
     setVehicles(prev => prev.filter(v => v.id !== id));
   };
 

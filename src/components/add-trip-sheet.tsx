@@ -113,7 +113,7 @@ export function AddTripSheet({ isOpen, setIsOpen, trip }: AddTripSheetProps) {
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
-      <SheetContent className="overflow-y-auto w-full sm:max-w-sm">
+      <SheetContent side={isMobile ? "bottom" : "right"} className="overflow-y-auto w-full sm:max-w-sm">
         <SheetHeader>
           <SheetTitle>{trip ? 'Edit Trip' : 'Add New Trip'}</SheetTitle>
           <SheetDescription>

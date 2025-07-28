@@ -1,6 +1,7 @@
+
 "use client";
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import { TripsProvider, useTrips } from './trips-context';
 import { VehiclesProvider, useVehicles } from './vehicles-context';
 import { SettingsProvider, useSettings } from './settings-context';
@@ -14,7 +15,7 @@ function LoadingScreen() {
     return (
         <div className="fixed inset-0 bg-background flex justify-center items-center z-[200]">
             <div className="flex flex-col items-center gap-4">
-                <Image src="/icon.png" alt="Trip Logs Logo" width={256} height={256} className="w-32 h-32 animate-pulse" />
+                <Image src="/icon.png" alt="Trip Logs Logo" width={256} height={256} className="w-32 h-32 animate-pulse" priority />
                 <p className="text-muted-foreground">Loading your data...</p>
             </div>
         </div>
@@ -54,15 +55,15 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
   return (
     <SettingsProvider>
       <UserInfoProvider>
-        <VehiclesProvider>
-          <OdometerProvider>
-            <TripsProvider>
-              <AppStateGate>
-                {children}
-              </AppStateGate>
-            </TripsProvider>
-          </OdometerProvider>
-        </VehiclesProvider>
+        <TripsProvider>
+           <VehiclesProvider>
+              <OdometerProvider>
+                <AppStateGate>
+                  {children}
+                </AppStateGate>
+              </OdometerProvider>
+            </VehiclesProvider>
+        </TripsProvider>
       </UserInfoProvider>
     </SettingsProvider>
   );

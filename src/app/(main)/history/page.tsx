@@ -6,9 +6,12 @@ import { useTrips } from '@/contexts/trips-context';
 import { TripCard } from '@/components/trip-card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import type { Trip } from '@/lib/types';
-import { AddTripSheet } from '@/components/add-trip-sheet';
-import { ViewTripDialog } from '@/components/view-trip-dialog';
 import { useToast } from '@/hooks/use-toast';
+import dynamic from 'next/dynamic';
+
+const AddTripSheet = dynamic(() => import('@/components/add-trip-sheet').then(mod => mod.AddTripSheet));
+const ViewTripDialog = dynamic(() => import('@/components/view-trip-dialog').then(mod => mod.ViewTripDialog));
+
 
 export default function HistoryPage() {
   const { trips, deleteTrip } = useTrips();
@@ -86,19 +89,23 @@ export default function HistoryPage() {
         </Accordion>
       )}
 
-      <AddTripSheet
-        isOpen={isSheetOpen}
-        setIsOpen={setIsSheetOpen}
-        trip={editingTrip}
-      />
+      {isSheetOpen && (
+        <AddTripSheet
+            isOpen={isSheetOpen}
+            setIsOpen={setIsSheetOpen}
+            trip={editingTrip}
+        />
+      )}
       
-       <ViewTripDialog
-        isOpen={isViewDialogOpen}
-        setIsOpen={setIsViewDialogOpen}
-        trip={viewingTrip}
-        onEdit={handleEditTrip}
-        onDelete={handleDeleteTrip}
-      />
+      {isViewDialogOpen && (
+         <ViewTripDialog
+            isOpen={isViewDialogOpen}
+            setIsOpen={setIsViewDialogOpen}
+            trip={viewingTrip}
+            onEdit={handleEditTrip}
+            onDelete={handleDeleteTrip}
+        />
+      )}
     </div>
   );
 }

@@ -6,13 +6,16 @@ import { useTrips } from '@/contexts/trips-context';
 import { TripCard } from '@/components/trip-card';
 import { Button } from '@/components/ui/button';
 import { Plus, Gauge } from 'lucide-react';
-import { AddTripSheet } from '@/components/add-trip-sheet';
 import type { Trip, OdometerReading } from '@/lib/types';
-import { ViewTripDialog } from '@/components/view-trip-dialog';
-import { UpdateOdometerDialog } from '@/components/update-odometer-dialog';
 import { useToast } from '@/hooks/use-toast';
 import { useOdometer } from '@/contexts/odometer-context';
 import { OdometerCard } from '@/components/odometer-card';
+import dynamic from 'next/dynamic';
+
+const AddTripSheet = dynamic(() => import('@/components/add-trip-sheet').then(mod => mod.AddTripSheet));
+const ViewTripDialog = dynamic(() => import('@/components/view-trip-dialog').then(mod => mod.ViewTripDialog));
+const UpdateOdometerDialog = dynamic(() => import('@/components/update-odometer-dialog').then(mod => mod.UpdateOdometerDialog));
+
 
 type TimelineItem = (Trip & { type: 'trip' }) | (OdometerReading & { type: 'odometer' });
 
@@ -89,7 +92,7 @@ export default function TripsPage() {
             if(item.type === 'trip') {
               return (
                 <TripCard 
-                  key={item.id} 
+                  key={`trip-${item.id}`} 
                   trip={item} 
                   onView={() => handleViewTrip(item)}
                   onEdit={() => handleEditTrip(item)} 
@@ -98,7 +101,7 @@ export default function TripsPage() {
             }
             if(item.type === 'odometer') {
               return (
-                <OdometerCard key={item.id} reading={item} />
+                <OdometerCard key={`odom-${item.id}`} reading={item} />
               )
             }
             return null;
@@ -122,24 +125,30 @@ export default function TripsPage() {
         <Plus className="w-8 h-8" />
       </Button>
 
-      <AddTripSheet
-        isOpen={isSheetOpen}
-        setIsOpen={setIsSheetOpen}
-        trip={editingTrip}
-      />
+      {isSheetOpen && (
+        <AddTripSheet
+            isOpen={isSheetOpen}
+            setIsOpen={setIsSheetOpen}
+            trip={editingTrip}
+        />
+      )}
       
-       <ViewTripDialog
-        isOpen={isViewDialogOpen}
-        setIsOpen={setIsViewDialogOpen}
-        trip={viewingTrip}
-        onEdit={handleEditTrip}
-        onDelete={handleDeleteTrip}
-      />
+      {isViewDialogOpen && (
+         <ViewTripDialog
+            isOpen={isViewDialogOpen}
+            setIsOpen={setIsViewDialogOpen}
+            trip={viewingTrip}
+            onEdit={handleEditTrip}
+            onDelete={handleDeleteTrip}
+        />
+      )}
 
-      <UpdateOdometerDialog
-        isOpen={isOdometerDialogOpen}
-        setIsOpen={setIsOdometerDialogOpen}
-      />
+      {isOdometerDialogOpen && (
+        <UpdateOdometerDialog
+            isOpen={isOdometerDialogOpen}
+            setIsOpen={setIsOdometerDialogOpen}
+        />
+      )}
     </div>
   );
 }

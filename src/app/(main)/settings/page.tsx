@@ -16,10 +16,12 @@ import { useVehicles } from '@/contexts/vehicles-context';
 import { useSettings } from '@/contexts/settings-context';
 import { useTrips } from '@/contexts/trips-context';
 import { useOdometer } from '@/contexts/odometer-context';
-import { AddVehicleDialog } from '@/components/add-vehicle-dialog';
 import { generatePdf } from '@/lib/pdf-generator';
 import { useToast } from '@/hooks/use-toast';
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
+
+const AddVehicleDialog = dynamic(() => import('@/components/add-vehicle-dialog').then(mod => mod.AddVehicleDialog));
 
 export default function SettingsPage() {
   const { userInfo, setUserInfo } = useUserInfo();
@@ -183,7 +185,9 @@ export default function SettingsPage() {
         <Image src="/icon.png" alt="Trip Logs Logo" width={256} height={256} className="w-32 h-32" />
       </div>
 
-      <AddVehicleDialog isOpen={isAddVehicleOpen} setIsOpen={setIsAddVehicleOpen} />
+      {isAddVehicleOpen && (
+        <AddVehicleDialog isOpen={isAddVehicleOpen} setIsOpen={setIsAddVehicleOpen} />
+      )}
     </div>
   );
 }
