@@ -1,8 +1,11 @@
+
 export interface Trip {
   id: string;
   date: string;
   startTime: string;
   endTime: string;
+  odometerStart: number | null;
+  odometerEnd: number | null;
   miles: number;
   grossEarnings: number;
   expenses: {

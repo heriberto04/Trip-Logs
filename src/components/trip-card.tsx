@@ -5,7 +5,7 @@ import React, { useState, useMemo, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { MoreHorizontal, Edit, Trash2 } from 'lucide-react';
+import { MoreHorizontal, Edit, Trash2, Gauge } from 'lucide-react';
 import { useTrips } from '@/contexts/trips-context';
 import { useSettings } from '@/contexts/settings-context';
 import { calculateDuration, formatCurrency, cn } from '@/lib/utils';
@@ -54,7 +54,7 @@ export const TripCard = React.memo(function TripCard({ trip, onView, onEdit }: T
     const formattedDate = format(new Date(tripDate.getTime() + tripDate.getTimezoneOffset() * 60000), 'EEE, MMM d');
     
     return { durationFormatted, hourlyRate, totalExpenses, deductions, net, formattedDate };
-  }, [trip, settings.deductionRate, settings.currency]);
+  }, [trip, settings.deductionRate]);
 
 
   const handleDelete = useCallback((e: React.MouseEvent) => {
@@ -83,7 +83,7 @@ export const TripCard = React.memo(function TripCard({ trip, onView, onEdit }: T
         className="overflow-hidden transition-all duration-200 ease-in-out hover:shadow-md hover:bg-card/95 cursor-pointer"
         onClick={onView}
       >
-        <CardHeader className="flex flex-row items-center justify-between p-2 bg-card">
+        <CardHeader className="flex flex-row items-center justify-between p-3">
           <div className="flex items-center gap-4">
             <CardTitle className="text-lg font-headline">{formattedDate}</CardTitle>
             <p className="font-semibold text-base text-muted-foreground">{durationFormatted}</p>
@@ -106,13 +106,30 @@ export const TripCard = React.memo(function TripCard({ trip, onView, onEdit }: T
             </DropdownMenuContent>
           </DropdownMenu>
         </CardHeader>
+
+        {trip.odometerStart !== null && trip.odometerEnd !== null && (
+            <>
+                <Separator />
+                <div className="flex items-center justify-center gap-4 px-3 py-2 text-sm bg-muted/30">
+                    <div className="flex items-center gap-2 text-muted-foreground">
+                        <Gauge className="w-4 h-4"/>
+                        <span className="font-mono">{trip.odometerStart.toLocaleString()}</span>
+                    </div>
+                    <div className="font-mono text-muted-foreground">-</div>
+                     <div className="flex items-center gap-2 text-muted-foreground">
+                        <span className="font-mono">{trip.odometerEnd.toLocaleString()}</span>
+                     </div>
+                </div>
+            </>
+        )}
+
         <Separator />
         <CardContent className="p-3 text-sm">
             <div className="grid grid-cols-3 gap-x-4 gap-y-2 text-center">
                 {/* Row 1 */}
                 <div className="space-y-1">
                     <p className="text-muted-foreground text-xs">Miles</p>
-                    <p className="font-semibold text-base">{trip.miles}</p>
+                    <p className="font-semibold text-base">{trip.miles.toFixed(1)}</p>
                 </div>
                 <div className="space-y-1">
                     <p className="text-muted-foreground text-xs">Deduction</p>

@@ -10,7 +10,7 @@ import { useVehicles } from '@/contexts/vehicles-context';
 import type { Trip } from '@/lib/types';
 import { format, parseISO } from 'date-fns';
 import { calculateDuration, formatCurrency } from '@/lib/utils';
-import { Edit, Trash2 } from 'lucide-react';
+import { Edit, Trash2, Gauge } from 'lucide-react';
 
 interface ViewTripDialogProps {
   isOpen: boolean;
@@ -72,7 +72,18 @@ export function ViewTripDialog({ isOpen, setIsOpen, trip, onEdit, onDelete }: Vi
 
              <div className="grid grid-cols-2 gap-4 text-sm">
                 <div className="font-semibold text-muted-foreground">Distance</div>
-                <div className="text-right">{trip.miles} {settings.unit}</div>
+                <div className="text-right">{trip.miles.toFixed(1)} {settings.unit}</div>
+                
+                {trip.odometerStart !== null && trip.odometerEnd !== null && (
+                     <div className="col-span-2 flex items-center justify-between text-xs text-muted-foreground">
+                        <div className="flex items-center gap-1">
+                            <Gauge className="w-3 h-3"/>
+                            <span>Odometer</span>
+                        </div>
+                        <span>{trip.odometerStart.toLocaleString()} - {trip.odometerEnd.toLocaleString()}</span>
+                     </div>
+                )}
+
 
                 <div className="font-semibold text-muted-foreground">Tax Deduction</div>
                 <div className="text-right">{formatCurrency(deductions, settings.currency)}</div>
