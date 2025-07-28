@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
 import { useTrips } from '@/contexts/trips-context';
 import { TripCard } from '@/components/trip-card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
@@ -37,25 +37,25 @@ export default function HistoryPage() {
     return Object.entries(grouped).sort(([yearA], [yearB]) => Number(yearB) - Number(yearA));
   }, [trips]);
   
-  const handleEditTrip = (trip: Trip) => {
+  const handleEditTrip = useCallback((trip: Trip) => {
     setEditingTrip(trip);
     setIsSheetOpen(true);
     setIsViewDialogOpen(false);
-  };
+  }, []);
   
-  const handleViewTrip = (trip: Trip) => {
+  const handleViewTrip = useCallback((trip: Trip) => {
     setViewingTrip(trip);
     setIsViewDialogOpen(true);
-  };
+  }, []);
 
-  const handleDeleteTrip = (id: string) => {
+  const handleDeleteTrip = useCallback((id: string) => {
     deleteTrip(id);
     setIsViewDialogOpen(false);
     toast({
         title: "Trip Deleted",
         description: "The trip has been permanently removed.",
     });
-  };
+  }, [deleteTrip, toast]);
 
   return (
     <div className="container mx-auto p-4">

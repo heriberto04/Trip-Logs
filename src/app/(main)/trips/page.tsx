@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { useTrips } from '@/contexts/trips-context';
 import { TripCard } from '@/components/trip-card';
 import { Button } from '@/components/ui/button';
@@ -27,30 +27,30 @@ export default function TripsPage() {
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   }, [trips, currentYear]);
 
-  const handleAddTrip = () => {
+  const handleAddTrip = useCallback(() => {
     setEditingTrip(null);
     setIsSheetOpen(true);
-  };
+  }, []);
 
-  const handleEditTrip = (trip: Trip) => {
+  const handleEditTrip = useCallback((trip: Trip) => {
     setEditingTrip(trip);
     setIsSheetOpen(true);
     setIsViewDialogOpen(false); // Close view dialog if open
-  };
+  }, []);
 
-  const handleViewTrip = (trip: Trip) => {
+  const handleViewTrip = useCallback((trip: Trip) => {
     setViewingTrip(trip);
     setIsViewDialogOpen(true);
-  };
+  }, []);
   
-  const handleDeleteTrip = (id: string) => {
+  const handleDeleteTrip = useCallback((id: string) => {
     deleteTrip(id);
     setIsViewDialogOpen(false);
     toast({
         title: "Trip Deleted",
         description: "The trip has been permanently removed.",
     });
-  }
+  }, [deleteTrip, toast]);
 
   return (
     <div className="container mx-auto p-4">
