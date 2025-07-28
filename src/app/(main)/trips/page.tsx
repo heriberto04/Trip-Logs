@@ -75,10 +75,10 @@ export default function TripsPage() {
 
       <Button
         onClick={handleAddTrip}
-        className="fixed bottom-20 left-1/2 -translate-x-1/2 w-16 h-16 rounded-full shadow-lg"
+        className="fixed bottom-20 left-1/2 -translate-x-1/2 w-14 h-14 rounded-full shadow-lg"
         aria-label="Add new trip"
       >
-        <Plus className="w-8 h-8" />
+        <Plus className="w-9 h-9" />
       </Button>
 
       <AddTripSheet
