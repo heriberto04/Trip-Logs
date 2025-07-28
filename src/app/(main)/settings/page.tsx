@@ -18,6 +18,7 @@ import { useTrips } from '@/contexts/trips-context';
 import { AddVehicleDialog } from '@/components/add-vehicle-dialog';
 import { generatePdf } from '@/lib/pdf-generator';
 import { useToast } from '@/hooks/use-toast';
+import Image from 'next/image';
 
 export default function SettingsPage() {
   const { userInfo, setUserInfo } = useUserInfo();
@@ -171,6 +172,10 @@ export default function SettingsPage() {
       <p className="text-center text-xs text-muted-foreground mt-8">
         © {new Date().getFullYear()} Trip Logs. All rights reserved.
       </p>
+
+      <div className="flex justify-center mt-4">
+        <Image src="/icon.png" alt="Trip Logs Logo" width={64} height={64} />
+      </div>
 
       <AddVehicleDialog isOpen={isAddVehicleOpen} setIsOpen={setIsAddVehicleOpen} />
     </div>
