@@ -85,7 +85,6 @@ export default function TripsPage() {
         onClick={handleOdometerClick}
         className="fixed bottom-24 left-6 w-16 h-10 rounded-full shadow-lg p-0 flex items-center justify-center"
         aria-label="Odometer"
-        variant="destructive"
       >
         <Gauge className="w-20 h-20" />
       </Button>
