@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 type UseLocalStorageReturn<T> = [T, React.Dispatch<React.SetStateAction<T>>, boolean];
 
@@ -6,7 +6,6 @@ export function useLocalStorage<T>(key: string, defaultValue: T): UseLocalStorag
   const [value, setValue] = useState<T>(defaultValue);
   const [isReady, setIsReady] = useState(false);
 
-  // This effect will only run on the client, after the initial render.
   useEffect(() => {
     try {
       const item = window.localStorage.getItem(key);
@@ -14,23 +13,38 @@ export function useLocalStorage<T>(key: string, defaultValue: T): UseLocalStorag
         setValue(JSON.parse(item));
       }
     } catch (error) {
-      console.error(error);
+      console.error(`Error reading localStorage key “${key}”:`, error);
     } finally {
-        setIsReady(true);
+      setIsReady(true);
     }
   }, [key]);
 
   useEffect(() => {
-    // This effect ensures we only write to localStorage on the client
-    // and when the value is not the initial default.
-    if(isReady){
-        try {
-            window.localStorage.setItem(key, JSON.stringify(value));
-        } catch (error) {
-            console.error(`Error writing to localStorage for key "${key}":`, error);
-        }
+    if (isReady) {
+      try {
+        window.localStorage.setItem(key, JSON.stringify(value));
+      } catch (error) {
+        console.error(`Error writing to localStorage for key "${key}":`, error);
+      }
     }
   }, [key, value, isReady]);
+
+  const handleStorageChange = useCallback((event: StorageEvent) => {
+    if (event.key === key && event.newValue) {
+      try {
+        setValue(JSON.parse(event.newValue));
+      } catch(e) {
+        console.error(`Error parsing storage change for key "${key}"`, e)
+      }
+    }
+  }, [key]);
+
+  useEffect(() => {
+    window.addEventListener('storage', handleStorageChange);
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, [handleStorageChange]);
 
   return [value, setValue, isReady];
 }
