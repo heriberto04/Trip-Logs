@@ -15,6 +15,7 @@ import { useUserInfo } from '@/contexts/user-info-context';
 import { useVehicles } from '@/contexts/vehicles-context';
 import { useSettings } from '@/contexts/settings-context';
 import { useTrips } from '@/contexts/trips-context';
+import { useOdometer } from '@/contexts/odometer-context';
 import { AddVehicleDialog } from '@/components/add-vehicle-dialog';
 import { generatePdf } from '@/lib/pdf-generator';
 import { useToast } from '@/hooks/use-toast';
@@ -25,27 +26,32 @@ export default function SettingsPage() {
   const { vehicles, deleteVehicle } = useVehicles();
   const { settings, setSettings } = useSettings();
   const { trips } = useTrips();
+  const { odometerReadings } = useOdometer();
   const { toast } = useToast();
 
   const [isAddVehicleOpen, setIsAddVehicleOpen] = React.useState(false);
   const [exportYear, setExportYear] = React.useState<string>(new Date().getFullYear().toString());
 
   const availableYears = React.useMemo(() => {
-    const years = new Set(trips.map(t => new Date(t.date).getFullYear().toString()));
+    const tripYears = trips.map(t => new Date(t.date).getFullYear().toString());
+    const odometerYears = odometerReadings.map(r => new Date(r.date).getFullYear().toString());
+    const years = new Set([...tripYears, ...odometerYears]);
     return Array.from(years).sort((a,b) => Number(b) - Number(a));
-  }, [trips]);
+  }, [trips, odometerReadings]);
 
   const handleExport = async () => {
-    const yearData = trips.filter(t => new Date(t.date).getFullYear().toString() === exportYear);
-    if(yearData.length === 0) {
+    const yearTrips = trips.filter(t => new Date(t.date).getFullYear().toString() === exportYear);
+    const yearOdometerReadings = odometerReadings.filter(r => new Date(r.date).getFullYear().toString() === exportYear);
+
+    if(yearTrips.length === 0 && yearOdometerReadings.length === 0) {
       toast({
         variant: "destructive",
         title: "No Data",
-        description: `No trips found for the year ${exportYear}.`,
+        description: `No data found for the year ${exportYear}.`,
       });
       return;
     }
-    await generatePdf(userInfo, yearData, settings, vehicles, exportYear);
+    await generatePdf(userInfo, yearTrips, yearOdometerReadings, settings, vehicles, exportYear);
     toast({
         title: "PDF Exported",
         description: `Your report for ${exportYear} has been generated.`,

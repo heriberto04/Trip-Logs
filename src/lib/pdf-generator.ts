@@ -1,7 +1,7 @@
 
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
-import type { UserInfo, Trip, AppSettings, Vehicle } from './types';
+import type { UserInfo, Trip, AppSettings, Vehicle, OdometerReading } from './types';
 import { calculateDuration, formatCurrency } from './utils';
 import { format } from 'date-fns';
 
@@ -10,9 +10,13 @@ interface jsPDFWithAutoTable extends jsPDF {
   autoTable: (options: any) => jsPDF;
 }
 
+type TimelineItem = (Trip & { type: 'trip' }) | (OdometerReading & { type: 'odometer' });
+
+
 export async function generatePdf(
   userInfo: UserInfo,
   trips: Trip[],
+  odometerReadings: OdometerReading[],
   settings: AppSettings,
   vehicles: Vehicle[],
   year: string
@@ -72,35 +76,54 @@ export async function generatePdf(
       theme: 'striped',
   });
 
-  // Trip Details Table
-  const tableBody = trips.map(trip => {
-    const duration = calculateDuration(trip.startTime, trip.endTime);
-    const vehicle = vehicles.find(v => v.id === trip.vehicleId);
-    const tripDate = new Date(trip.date);
-    const formattedDate = format(new Date(tripDate.getTime() + tripDate.getTimezoneOffset() * 60000), 'yyyy-MM-dd');
-    const totalExpenses = trip.expenses.gasoline + trip.expenses.tolls + trip.expenses.food;
-    const net = trip.grossEarnings - totalExpenses;
+  // Data Log Table
+  const timelineItems: TimelineItem[] = [
+    ...trips.map(t => ({ ...t, type: 'trip' as const })),
+    ...odometerReadings.map(r => ({ ...r, type: 'odometer' as const }))
+  ];
 
-    return [
-      formattedDate,
-      `${Math.floor(duration / 60)}h ${duration % 60}m`,
-      trip.miles,
-      formatCurrency(trip.grossEarnings, settings.currency),
-      formatCurrency(trip.expenses.gasoline, settings.currency),
-      formatCurrency(trip.expenses.tolls, settings.currency),
-      formatCurrency(trip.expenses.food, settings.currency),
-      formatCurrency(net, settings.currency),
-      vehicle ? `${vehicle.make} ${vehicle.model}` : 'N/A',
-    ];
+  const sortedItems = timelineItems.sort((a,b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+  const tableBody = sortedItems.map(item => {
+    const itemDate = new Date(item.date);
+    const formattedDate = format(new Date(itemDate.getTime() + itemDate.getTimezoneOffset() * 60000), 'yyyy-MM-dd');
+    const vehicle = vehicles.find(v => v.id === item.vehicleId);
+    
+    if (item.type === 'trip') {
+      const duration = calculateDuration(item.startTime, item.endTime);
+      const totalExpenses = item.expenses.gasoline + item.expenses.tolls + item.expenses.food;
+      const net = item.grossEarnings - totalExpenses;
+      return [
+        formattedDate,
+        `${Math.floor(duration / 60)}h ${duration % 60}m`,
+        item.miles,
+        formatCurrency(item.grossEarnings, settings.currency),
+        formatCurrency(totalExpenses, settings.currency),
+        formatCurrency(net, settings.currency),
+        vehicle ? `${vehicle.make} ${vehicle.model}` : 'N/A',
+        `${item.odometerStart?.toLocaleString() ?? 'N/A'} - ${item.odometerEnd?.toLocaleString() ?? 'N/A'}`
+      ];
+    } else { // Odometer reading
+      return [
+        formattedDate,
+        { content: 'Odometer Update', colSpan: 5, styles: { fontStyle: 'italic', textColor: [100, 100, 100]} },
+        '',
+        '',
+        '',
+        '',
+        vehicle ? `${vehicle.make} ${vehicle.model}` : 'N/A',
+        item.odometer.toLocaleString()
+      ];
+    }
   });
   
   doc.setFontSize(12);
   doc.setFont('helvetica', 'bold');
   const finalY = (doc as any).lastAutoTable.finalY || 130;
-  doc.text('Trip Log', 14, finalY + 15);
+  doc.text('Data Log', 14, finalY + 15);
   doc.autoTable({
     startY: finalY + 20,
-    head: [['Date', 'Duration', 'Distance', 'Gross', 'Gasoline', 'Tolls', 'Food', 'Net', 'Vehicle']],
+    head: [['Date', 'Duration', 'Distance', 'Gross', 'Expenses', 'Net', 'Vehicle', 'Odometer']],
     body: tableBody,
     theme: 'grid',
     headStyles: {
