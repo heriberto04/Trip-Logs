@@ -11,12 +11,13 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { CalendarIcon } from 'lucide-react';
 import { Calendar } from '@/components/ui/calendar';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { format } from 'date-fns';
+import { format, parse } from 'date-fns';
 import { useTrips } from '@/contexts/trips-context';
 import { useVehicles } from '@/contexts/vehicles-context';
 import type { Trip } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { useEffect } from 'react';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface AddTripSheetProps {
   isOpen: boolean;
@@ -43,6 +44,7 @@ type TripFormData = z.infer<typeof tripSchema>;
 export function AddTripSheet({ isOpen, setIsOpen, trip }: AddTripSheetProps) {
   const { addTrip, updateTrip } = useTrips();
   const { vehicles } = useVehicles();
+  const isMobile = useIsMobile();
 
   const form = useForm<TripFormData>({
     resolver: zodResolver(tripSchema),
@@ -123,28 +125,39 @@ export function AddTripSheet({ isOpen, setIsOpen, trip }: AddTripSheetProps) {
               name="date"
               control={form.control}
               render={({ field }) => (
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant={"outline"}
-                      className={cn(
-                        "w-full justify-start text-left font-normal",
-                        !field.value && "text-muted-foreground"
-                      )}
-                    >
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0">
-                    <Calendar
-                      mode="single"
-                      selected={field.value}
-                      onSelect={field.onChange}
-                      initialFocus
-                    />
-                  </PopoverContent>
-                </Popover>
+                isMobile ? (
+                  <Input 
+                    type="date"
+                    value={field.value ? format(field.value, 'yyyy-MM-dd') : ''}
+                    onChange={(e) => {
+                      const date = parse(e.target.value, 'yyyy-MM-dd', new Date());
+                      field.onChange(date);
+                    }}
+                  />
+                ) : (
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "w-full justify-start text-left font-normal",
+                          !field.value && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0">
+                      <Calendar
+                        mode="single"
+                        selected={field.value}
+                        onSelect={field.onChange}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                )
               )}
             />
              {form.formState.errors.date && <p className="text-red-500 text-xs">{form.formState.errors.date.message}</p>}

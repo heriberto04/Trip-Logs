@@ -6,6 +6,11 @@ import { Toaster } from '@/components/ui/toaster';
 export const metadata: Metadata = {
   title: 'Trip Logs',
   description: 'Track your driving for business and tax purposes.',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'Trip Logs',
+  },
 };
 
 export default function RootLayout({
