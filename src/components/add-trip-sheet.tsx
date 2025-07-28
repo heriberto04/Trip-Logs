@@ -143,7 +143,6 @@ export function AddTripSheet({ isOpen, setIsOpen, trip }: AddTripSheetProps) {
                         field.onChange(null);
                       }
                     }}
-                    onClick={(e) => e.currentTarget.showPicker()}
                   />
                 ) : (
                   <Popover>
@@ -205,12 +204,12 @@ export function AddTripSheet({ isOpen, setIsOpen, trip }: AddTripSheetProps) {
                     <Input id="gasoline" type="number" step="0.01" placeholder="0" {...form.register('expenses.gasoline')} />
                 </div>
                 <div className="space-y-1">
-                    <Label htmlFor="food" className="text-xs">Food</Label>
-                    <Input id="food" type="number" step="0.01" placeholder="0" {...form.register('expenses.food')} />
-                </div>
-                <div className="space-y-1">
                     <Label htmlFor="tolls" className="text-xs">Tolls</Label>
                     <Input id="tolls" type="number" step="0.01" placeholder="0" {...form.register('expenses.tolls')} />
+                </div>
+                <div className="space-y-1">
+                    <Label htmlFor="food" className="text-xs">Food</Label>
+                    <Input id="food" type="number" step="0.01" placeholder="0" {...form.register('expenses.food')} />
                 </div>
             </div>
           </div>
