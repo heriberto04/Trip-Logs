@@ -74,7 +74,7 @@ export function ViewTripDialog({ isOpen, setIsOpen, trip, onEdit, onDelete }: Vi
                 <div className="font-semibold text-muted-foreground">Distance</div>
                 <div className="text-right">{trip.miles.toFixed(1)} {settings.unit}</div>
                 
-                {trip.odometerStart !== null && trip.odometerEnd !== null && (
+                {typeof trip.odometerStart === 'number' && typeof trip.odometerEnd === 'number' && (
                      <div className="col-span-2 flex items-center justify-between text-xs text-muted-foreground">
                         <div className="flex items-center gap-1">
                             <Gauge className="w-3 h-3"/>
