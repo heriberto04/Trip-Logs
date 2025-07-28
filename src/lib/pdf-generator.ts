@@ -91,17 +91,15 @@ export async function generatePdf(
     
     if (item.type === 'trip') {
       const duration = calculateDuration(item.startTime, item.endTime);
-      const totalExpenses = item.expenses.gasoline + item.expenses.tolls + item.expenses.food;
-      const net = item.grossEarnings - totalExpenses;
       return [
         formattedDate,
         `${Math.floor(duration / 60)}h ${duration % 60}m`,
         item.miles,
         formatCurrency(item.grossEarnings, settings.currency),
-        formatCurrency(totalExpenses, settings.currency),
-        formatCurrency(net, settings.currency),
+        formatCurrency(item.expenses.gasoline, settings.currency),
+        formatCurrency(item.expenses.tolls, settings.currency),
+        formatCurrency(item.expenses.food, settings.currency),
         vehicle ? `${vehicle.year} ${vehicle.make} ${vehicle.model}` : 'N/A',
-        `${item.odometerStart?.toLocaleString() ?? 'N/A'} - ${item.odometerEnd?.toLocaleString() ?? 'N/A'}`
       ];
     } else { // Odometer reading
       const vehicleName = vehicle ? `${vehicle.year} ${vehicle.make} ${vehicle.model}` : 'N/A';
@@ -119,7 +117,7 @@ export async function generatePdf(
   doc.text('Data Log', 14, finalY + 15);
   doc.autoTable({
     startY: finalY + 20,
-    head: [['Date', 'Duration', 'Distance', 'Gross', 'Expenses', 'Net', 'Vehicle', 'Odometer']],
+    head: [['Date', 'Duration', 'Distance', 'Gross', 'Gasoline', 'Tolls', 'Food', 'Vehicle']],
     body: tableBody,
     theme: 'grid',
     headStyles: {
