@@ -16,7 +16,7 @@ import { useTrips } from '@/contexts/trips-context';
 import { useVehicles } from '@/contexts/vehicles-context';
 import type { Trip } from '@/lib/types';
 import { cn } from '@/lib/utils';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 interface AddTripSheetProps {
@@ -45,6 +45,11 @@ export function AddTripSheet({ isOpen, setIsOpen, trip }: AddTripSheetProps) {
   const { addTrip, updateTrip } = useTrips();
   const { vehicles } = useVehicles();
   const isMobile = useIsMobile();
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const form = useForm<TripFormData>({
     resolver: zodResolver(tripSchema),
@@ -125,13 +130,17 @@ export function AddTripSheet({ isOpen, setIsOpen, trip }: AddTripSheetProps) {
               name="date"
               control={form.control}
               render={({ field }) => (
-                isMobile ? (
+                isMounted && isMobile ? (
                   <Input 
                     type="date"
                     value={field.value ? format(field.value, 'yyyy-MM-dd') : ''}
                     onChange={(e) => {
-                      const date = parse(e.target.value, 'yyyy-MM-dd', new Date());
-                      field.onChange(date);
+                      if (e.target.value) {
+                        const date = parse(e.target.value, 'yyyy-MM-dd', new Date());
+                        field.onChange(date);
+                      } else {
+                        field.onChange(null);
+                      }
                     }}
                   />
                 ) : (
