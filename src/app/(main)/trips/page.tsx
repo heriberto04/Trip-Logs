@@ -83,19 +83,19 @@ export default function TripsPage() {
       
       <Button
         onClick={handleOdometerClick}
-        className="fixed bottom-24 left-6 w-16 h-16 rounded-full shadow-lg p-0 flex items-center justify-center"
+        className="fixed bottom-24 left-6 w-16 h-10 rounded-full shadow-lg p-0 flex items-center justify-center"
         aria-label="Odometer"
-        variant="outline"
+        variant="destructive"
       >
-        <Gauge className="w-12 h-12" />
+        <Gauge className="w-20 h-20" />
       </Button>
 
       <Button
         onClick={handleAddTrip}
-        className="fixed bottom-24 right-6 w-16 h-16 rounded-full shadow-lg p-0 flex items-center justify-center"
+        className="fixed bottom-24 right-6 w-16 h-10 rounded-full shadow-lg p-0 flex items-center justify-center"
         aria-label="Add new trip"
       >
-        <Plus className="w-12 h-12" />
+        <Plus className="w-20 h-20" />
       </Button>
 
       <AddTripSheet
