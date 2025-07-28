@@ -5,7 +5,7 @@ import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
   title: 'Trip Logs',
-  description: 'Track your driving for business and tax purposes.',
+  description: 'A comprehensive yet intuitive application designed for drivers who need to meticulously track their trips for business and tax purposes. Log every journey with details on earnings, expenses, and mileage, and let the app provide you with powerful summaries and automated calculations to maximize your deductions and understand your profitability.',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
