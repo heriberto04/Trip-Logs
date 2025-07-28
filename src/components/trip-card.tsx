@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
@@ -30,29 +30,38 @@ interface TripCardProps {
   onEdit: () => void;
 }
 
-export function TripCard({ trip, onView, onEdit }: TripCardProps) {
+export const TripCard = React.memo(function TripCard({ trip, onView, onEdit }: TripCardProps) {
   const { deleteTrip } = useTrips();
   const { settings } = useSettings();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
-  const durationMinutes = calculateDuration(trip.startTime, trip.endTime);
-  const durationHours = durationMinutes / 60;
-  const hourlyRate = durationHours > 0 ? trip.grossEarnings / durationHours : 0;
-  const totalExpenses = trip.expenses.gasoline + trip.expenses.tolls + trip.expenses.food;
-  const deductions = trip.miles * settings.deductionRate;
-  const net = trip.grossEarnings - totalExpenses;
+  const {
+    durationFormatted,
+    hourlyRate,
+    totalExpenses,
+    deductions,
+    net,
+    formattedDate
+  } = useMemo(() => {
+    const durationMinutes = calculateDuration(trip.startTime, trip.endTime);
+    const durationHours = durationMinutes / 60;
+    const hourlyRate = durationHours > 0 ? trip.grossEarnings / durationHours : 0;
+    const totalExpenses = trip.expenses.gasoline + trip.expenses.tolls + trip.expenses.food;
+    const deductions = trip.miles * settings.deductionRate;
+    const net = trip.grossEarnings - totalExpenses;
+    const durationFormatted = `${Math.floor(durationHours)}h ${durationMinutes % 60}m`;
+    const tripDate = new Date(trip.date);
+    const formattedDate = format(new Date(tripDate.getTime() + tripDate.getTimezoneOffset() * 60000), 'EEE, MMM d');
+    
+    return { durationFormatted, hourlyRate, totalExpenses, deductions, net, formattedDate };
+  }, [trip, settings.deductionRate, settings.currency]);
 
-  const durationFormatted = `${Math.floor(durationHours)}h ${durationMinutes % 60}m`;
 
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
     deleteTrip(trip.id);
     setShowDeleteConfirm(false);
   };
-  
-  const tripDate = new Date(trip.date);
-  const formattedDate = format(new Date(tripDate.getTime() + tripDate.getTimezoneOffset() * 60000), 'EEE, MMM d');
-
 
   return (
     <>
@@ -133,4 +142,4 @@ export function TripCard({ trip, onView, onEdit }: TripCardProps) {
       </AlertDialog>
     </>
   );
-}
+});
