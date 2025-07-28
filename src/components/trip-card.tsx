@@ -107,7 +107,7 @@ export const TripCard = React.memo(function TripCard({ trip, onView, onEdit }: T
           </DropdownMenu>
         </CardHeader>
 
-        {trip.odometerStart !== null && trip.odometerEnd !== null && (
+        {typeof trip.odometerStart === 'number' && typeof trip.odometerEnd === 'number' && (
             <>
                 <Separator />
                 <div className="flex items-center justify-center gap-4 px-3 py-2 text-sm bg-muted/30">
