@@ -171,7 +171,7 @@ export function UpdateOdometerDialog({ isOpen, setIsOpen }: UpdateOdometerDialog
           </div>
           <div className="space-y-2">
             <Label htmlFor="odometer">Odometer</Label>
-            <Input id="odometer" type="number" {...form.register('odometer')} />
+            <Input id="odometer" type="number" inputMode="numeric" pattern="[0-9]*" {...form.register('odometer')} />
             {form.formState.errors.odometer && <p className="text-red-500 text-xs">{form.formState.errors.odometer.message}</p>}
           </div>
           <DialogFooter>

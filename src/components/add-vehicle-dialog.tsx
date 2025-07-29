@@ -64,7 +64,7 @@ export function AddVehicleDialog({ isOpen, setIsOpen }: AddVehicleDialogProps) {
           </div>
           <div className="space-y-2">
             <Label htmlFor="odometer">Odometer</Label>
-            <Input id="odometer" type="number" {...register('odometer')} />
+            <Input id="odometer" type="number" inputMode="numeric" pattern="[0-9]*" {...register('odometer')} />
           </div>
           <DialogFooter>
             <Button type="submit">Save Vehicle</Button>
