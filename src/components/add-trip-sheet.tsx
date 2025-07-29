@@ -214,13 +214,13 @@ export function AddTripSheet({ isOpen, setIsOpen, trip }: AddTripSheetProps) {
 
           <div className="space-y-2">
             <Label htmlFor="miles">Distance</Label>
-            <Input id="miles" type="number" step="0.01" {...form.register('miles')} />
+            <Input id="miles" type="number" inputMode="decimal" step="0.01" {...form.register('miles')} />
              {form.formState.errors.miles && <p className="text-red-500 text-xs">{form.formState.errors.miles.message}</p>}
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="grossEarnings">Gross Earnings</Label>
-            <Input id="grossEarnings" type="number" step="0.01" {...form.register('grossEarnings')} />
+            <Input id="grossEarnings" type="number" inputMode="decimal" step="0.01" {...form.register('grossEarnings')} />
           </div>
 
           <div className="space-y-2">
@@ -228,15 +228,15 @@ export function AddTripSheet({ isOpen, setIsOpen, trip }: AddTripSheetProps) {
             <div className="grid grid-cols-3 gap-2">
                 <div className="space-y-1">
                     <Label htmlFor="gasoline" className="text-xs">Gasoline</Label>
-                    <Input id="gasoline" type="number" step="0.01" {...form.register('expenses.gasoline')} />
+                    <Input id="gasoline" type="number" inputMode="decimal" step="0.01" {...form.register('expenses.gasoline')} />
                 </div>
                 <div className="space-y-1">
                     <Label htmlFor="food" className="text-xs">Food</Label>
-                    <Input id="food" type="number" step="0.01" {...form.register('expenses.food')} />
+                    <Input id="food" type="number" inputMode="decimal" step="0.01" {...form.register('expenses.food')} />
                 </div>
                  <div className="space-y-1">
                     <Label htmlFor="tolls" className="text-xs">Tolls</Label>
-                    <Input id="tolls" type="number" step="0.01" {...form.register('expenses.tolls')} />
+                    <Input id="tolls" type="number" inputMode="decimal" step="0.01" {...form.register('expenses.tolls')} />
                 </div>
             </div>
           </div>
