@@ -144,7 +144,6 @@ export async function generatePdf(
     try {
       await navigator.share({
         title: `Trip Logs Report ${year}`,
-        text: `Here is your trip log report for ${year}.`,
         files: [pdfFile],
       });
     } catch (error) {
