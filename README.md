@@ -14,7 +14,7 @@ Your all-in-one solution for managing vehicle trips and expenses. This web app o
 Your privacy is our utmost priority. All the information you enter into Trip Logs, including your personal details, vehicle information, odometer updates, and trip logs, is stored exclusively on your local device. We do not have access to your data, and it is never transmitted to any external servers. You are in complete control of your information at all times.
 
 ## The Bad!
-All the data is stored localy in your browser or app. We are not responsible for any data loss if you clear your browser data, switch browsers, or deleting the app.
+All the data is stored localy in your browser or app. We are not responsible for any data loss if you clear your browser data, switch browsers, or delete the app.
 
 # User Agreement
 
