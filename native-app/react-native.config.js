@@ -1,7 +1,3 @@
 module.exports = {
-  project: {
-    ios: {
-      project: './ios/TripLogsNative.xcodeproj',
-    },
-  },
+  // Configuration will be auto-discovered
 };
