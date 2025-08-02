@@ -65,7 +65,7 @@ export default function SettingsPage() {
     });
   };
 
-  const handleExportAllData = () => {
+  const handleExportAllData = async () => {
     const allData = {
       userInfo,
       vehicles,
@@ -75,18 +75,43 @@ export default function SettingsPage() {
     };
     const jsonString = JSON.stringify(allData, null, 2);
     const blob = new Blob([jsonString], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `trip-logs-backup-${new Date().toISOString().split('T')[0]}.json`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-    toast({
-      title: "Data Exported",
-      description: "All your data has been saved to a JSON file.",
-    });
+    const fileName = `trip-logs-backup-${new Date().toISOString().split('T')[0]}.json`;
+    const file = new File([blob], fileName, { type: 'application/json' });
+
+    const downloadData = () => {
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        toast({
+          title: "Data Exported",
+          description: "All your data has been saved to a JSON file.",
+        });
+    }
+
+    if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+            await navigator.share({
+                title: "Trip Logs Backup",
+                files: [file],
+            });
+            toast({
+              title: "Data Exported",
+              description: "Your backup file has been shared.",
+            });
+        } catch (error) {
+            console.error('Error sharing data:', error);
+            // Fallback to download if sharing fails
+            downloadData();
+        }
+    } else {
+        // Fallback for browsers that don't support Web Share API for files
+        downloadData();
+    }
   };
 
   const handleImportClick = () => {
@@ -320,5 +345,3 @@ export default function SettingsPage() {
     </div>
   );
 }
-
-    
