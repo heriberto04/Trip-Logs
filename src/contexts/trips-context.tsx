@@ -13,6 +13,7 @@ interface TripsContextType {
   deleteTrip: (id: string) => void;
   getTripsByYear: (year: number) => Trip[];
   deleteTripsByVehicleId: (vehicleId: string) => void;
+  importTrips: (trips: Trip[]) => void;
   isReady: boolean;
 }
 
@@ -50,8 +51,12 @@ export function TripsProvider({ children }: { children: ReactNode }) {
     return trips.filter(trip => new Date(trip.date).getFullYear() === year);
   }, [trips]);
 
+  const importTrips = (newTrips: Trip[]) => {
+    setTrips(newTrips);
+  };
+
   return (
-    <TripsContext.Provider value={{ trips, addTrip, updateTrip, deleteTrip, getTripsByYear, deleteTripsByVehicleId, isReady }}>
+    <TripsContext.Provider value={{ trips, addTrip, updateTrip, deleteTrip, getTripsByYear, deleteTripsByVehicleId, importTrips, isReady }}>
       {children}
     </TripsContext.Provider>
   );
@@ -64,3 +69,5 @@ export function useTrips() {
   }
   return context;
 }
+
+    

@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 interface OdometerContextType {
   odometerReadings: OdometerReading[];
   addOdometerReading: (reading: Omit<OdometerReading, 'id'>) => void;
+  importOdometerReadings: (readings: OdometerReading[]) => void;
   isReady: boolean;
 }
 
@@ -24,9 +25,13 @@ export function OdometerProvider({ children }: { children: ReactNode }) {
     };
     setOdometerReadings(prev => [newReading, ...prev]);
   };
+  
+  const importOdometerReadings = (readings: OdometerReading[]) => {
+    setOdometerReadings(readings);
+  };
 
   return (
-    <OdometerContext.Provider value={{ odometerReadings, addOdometerReading, isReady }}>
+    <OdometerContext.Provider value={{ odometerReadings, addOdometerReading, importOdometerReadings, isReady }}>
       {children}
     </OdometerContext.Provider>
   );
@@ -39,3 +44,5 @@ export function useOdometer() {
   }
   return context;
 }
+
+    

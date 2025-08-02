@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { createContext, useContext, ReactNode } from 'react';
@@ -7,6 +8,7 @@ import type { UserInfo } from '@/lib/types';
 interface UserInfoContextType {
   userInfo: UserInfo;
   setUserInfo: React.Dispatch<React.SetStateAction<UserInfo>>;
+  importUserInfo: (userInfo: UserInfo) => void;
   isReady: boolean;
 }
 
@@ -23,8 +25,12 @@ const UserInfoContext = createContext<UserInfoContextType | undefined>(undefined
 export function UserInfoProvider({ children }: { children: ReactNode }) {
   const [userInfo, setUserInfo, isReady] = useLocalStorage<UserInfo>('userInfo', defaultUserInfo);
 
+  const importUserInfo = (newUserInfo: UserInfo) => {
+    setUserInfo(newUserInfo);
+  };
+
   return (
-    <UserInfoContext.Provider value={{ userInfo, setUserInfo, isReady }}>
+    <UserInfoContext.Provider value={{ userInfo, setUserInfo, importUserInfo, isReady }}>
       {children}
     </UserInfoContext.Provider>
   );
@@ -37,3 +43,5 @@ export function useUserInfo() {
   }
   return context;
 }
+
+    

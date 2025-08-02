@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent } from '@/components/ui/card';
-import { Trash2, PlusCircle, Upload } from 'lucide-react';
+import { Trash2, PlusCircle, Upload, Download, FileUp } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import { useUserInfo } from '@/contexts/user-info-context';
@@ -20,18 +20,23 @@ import { generatePdf } from '@/lib/pdf-generator';
 import { useToast } from '@/hooks/use-toast';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 
 const AddVehicleDialog = dynamic(() => import('@/components/add-vehicle-dialog').then(mod => mod.AddVehicleDialog));
 
 export default function SettingsPage() {
-  const { userInfo, setUserInfo } = useUserInfo();
-  const { vehicles, deleteVehicle } = useVehicles();
-  const { settings, setSettings } = useSettings();
-  const { trips } = useTrips();
-  const { odometerReadings } = useOdometer();
+  const { userInfo, setUserInfo, importUserInfo } = useUserInfo();
+  const { vehicles, deleteVehicle, importVehicles } = useVehicles();
+  const { settings, setSettings, importSettings } = useSettings();
+  const { trips, importTrips } = useTrips();
+  const { odometerReadings, importOdometerReadings } = useOdometer();
   const { toast } = useToast();
 
   const [isAddVehicleOpen, setIsAddVehicleOpen] = React.useState(false);
+  const [isImportConfirmOpen, setIsImportConfirmOpen] = React.useState(false);
+  const [fileToImport, setFileToImport] = React.useState<File | null>(null);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
+
   const [exportYear, setExportYear] = React.useState<string>(new Date().getFullYear().toString());
 
   const availableYears = React.useMemo(() => {
@@ -58,6 +63,93 @@ export default function SettingsPage() {
         title: "PDF Exported",
         description: `Your report for ${exportYear} has been generated.`,
     });
+  };
+
+  const handleExportAllData = () => {
+    const allData = {
+      userInfo,
+      vehicles,
+      settings,
+      trips,
+      odometerReadings
+    };
+    const jsonString = JSON.stringify(allData, null, 2);
+    const blob = new Blob([jsonString], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `trip-logs-backup-${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    toast({
+      title: "Data Exported",
+      description: "All your data has been saved to a JSON file.",
+    });
+  };
+
+  const handleImportClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setFileToImport(file);
+      setIsImportConfirmOpen(true);
+    }
+  };
+  
+  const handleConfirmImport = () => {
+    if (!fileToImport) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const text = e.target?.result;
+        if (typeof text !== 'string') {
+          throw new Error("File is not valid text");
+        }
+        const data = JSON.parse(text);
+        
+        // Basic validation
+        if (data.userInfo && data.vehicles && data.settings && data.trips && data.odometerReadings) {
+          importUserInfo(data.userInfo);
+          importVehicles(data.vehicles);
+          importSettings(data.settings);
+          importTrips(data.trips);
+          importOdometerReadings(data.odometerReadings);
+          
+          toast({
+            title: "Import Successful",
+            description: "Your data has been restored from the backup file.",
+          });
+        } else {
+          throw new Error("Invalid backup file format.");
+        }
+      } catch (error) {
+        toast({
+          variant: "destructive",
+          title: "Import Failed",
+          description: error instanceof Error ? error.message : "Could not read or parse the file.",
+        });
+      } finally {
+        setIsImportConfirmOpen(false);
+        setFileToImport(null);
+        if(fileInputRef.current) {
+          fileInputRef.current.value = "";
+        }
+      }
+    };
+    reader.onerror = () => {
+       toast({
+          variant: "destructive",
+          title: "Import Failed",
+          description: "There was an error reading the file.",
+        });
+    }
+    reader.readAsText(fileToImport);
   };
 
   return (
@@ -112,28 +204,48 @@ export default function SettingsPage() {
             </Button>
           </AccordionContent>
         </AccordionItem>
-
-        {/* Export PDF */}
-        <AccordionItem value="export-pdf" className="border-b-0">
-          <AccordionTrigger className="text-xl font-semibold p-4 bg-card rounded-lg">Export PDF</AccordionTrigger>
-          <AccordionContent className="p-4 space-y-4">
-            <div className="space-y-2">
-                <Label>Select Year</Label>
-                <Select value={exportYear} onValueChange={setExportYear}>
-                    <SelectTrigger>
-                        <SelectValue placeholder="Select year" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        {availableYears.map(year => (
-                            <SelectItem key={year} value={year}>{year}</SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
-            </div>
-            <Button className="w-full" onClick={handleExport} disabled={availableYears.length === 0}>
-                <Upload className="mr-2 h-4 w-4"/>
-                Export PDF
-            </Button>
+        
+        {/* Export / Import Data */}
+        <AccordionItem value="data-export-import" className="border-b-0">
+          <AccordionTrigger className="text-xl font-semibold p-4 bg-card rounded-lg">Data Management</AccordionTrigger>
+           <AccordionContent className="p-4 space-y-4">
+             <div className="space-y-2">
+               <Label>Export PDF Report</Label>
+                <div className="flex gap-2">
+                  <Select value={exportYear} onValueChange={setExportYear}>
+                      <SelectTrigger>
+                          <SelectValue placeholder="Select year" />
+                      </SelectTrigger>
+                      <SelectContent>
+                          {availableYears.map(year => (
+                              <SelectItem key={year} value={year}>{year}</SelectItem>
+                          ))}
+                      </SelectContent>
+                  </Select>
+                  <Button onClick={handleExport} disabled={availableYears.length === 0} className="w-48">
+                      <Upload className="mr-2 h-4 w-4"/>
+                      Export PDF
+                  </Button>
+                </div>
+             </div>
+             <div className="space-y-2">
+                <Label>Backup & Restore</Label>
+                <div className="flex gap-2">
+                  <Button onClick={handleExportAllData} variant="outline" className="w-full">
+                    <Download className="mr-2 h-4 w-4"/> Export All Data
+                  </Button>
+                  <Button onClick={handleImportClick} variant="outline" className="w-full">
+                    <FileUp className="mr-2 h-4 w-4"/> Import Data
+                  </Button>
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleFileChange}
+                    className="hidden"
+                    accept="application/json"
+                  />
+                </div>
+             </div>
           </AccordionContent>
         </AccordionItem>
 
@@ -188,6 +300,25 @@ export default function SettingsPage() {
       {isAddVehicleOpen && (
         <AddVehicleDialog isOpen={isAddVehicleOpen} setIsOpen={setIsAddVehicleOpen} />
       )}
+      
+       <AlertDialog open={isImportConfirmOpen} onOpenChange={setIsImportConfirmOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure you want to import data?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will overwrite all your current data. This action cannot be undone. Please ensure you have a backup of your current data if you wish to keep it.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => {
+              if(fileInputRef.current) fileInputRef.current.value = "";
+            }}>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleConfirmImport}>Import</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
+
+    

@@ -13,6 +13,7 @@ interface VehiclesContextType {
   updateVehicleOdometer: (id: string, odometer: number) => void;
   deleteVehicle: (id: string) => void;
   getVehicleById: (id: string) => Vehicle | undefined;
+  importVehicles: (vehicles: Vehicle[]) => void;
   isReady: boolean;
 }
 
@@ -39,9 +40,13 @@ export function VehiclesProvider({ children }: { children: ReactNode }) {
   const getVehicleById = (id: string) => {
     return vehicles.find(v => v.id === id);
   }
+  
+  const importVehicles = (newVehicles: Vehicle[]) => {
+    setVehicles(newVehicles);
+  };
 
   return (
-    <VehiclesContext.Provider value={{ vehicles, addVehicle, updateVehicleOdometer, deleteVehicle, getVehicleById, isReady }}>
+    <VehiclesContext.Provider value={{ vehicles, addVehicle, updateVehicleOdometer, deleteVehicle, getVehicleById, importVehicles, isReady }}>
       {children}
     </VehiclesContext.Provider>
   );
@@ -54,3 +59,5 @@ export function useVehicles() {
   }
   return context;
 }
+
+    
