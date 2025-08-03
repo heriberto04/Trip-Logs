@@ -1,16 +1,16 @@
 {
-  "name": "DriveTrack Pro",
-  "short_name": "DriveTrack Pro",
-  "description": "Log and manage your driving trips for tax purposes.",
-  "start_url": "/",
-  "display": "standalone",
-  "background_color": "#181818",
-  "theme_color": "#C80000",
+  "name": "Trip Logs",
+  "short_name": "TripLogs",
   "icons": [
     {
       "src": "/icon.png",
       "sizes": "512x512",
       "type": "image/png"
     }
-  ]
+  ],
+  "theme_color": "#000000",
+  "background_color": "#000000",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/trips"
 }
