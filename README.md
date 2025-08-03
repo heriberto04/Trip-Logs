@@ -1,6 +1,11 @@
-# Get Started
+# Trip Logs
 
-To get started, go to https://studio--trip-logs-j39tq.us-central1.hosted.app/trips
+1.  **Access the Application:** If you're using the web version, simply open the application in your browser.
+2.  **Create Your First Vehicle Profile:** Navigate to the "Vehicles" section (or similar) and add details about your vehicle, including its starting odometer reading.
+3.  **Log Your First Trip:** Go to the "Trips" section and enter the details of your trip, including start and end points, distance, earnings, and any associated expenses.
+4.  **Explore Features:** Familiarize yourself with the other sections like "Summary" for data overviews, "History" for past trips, and "Settings" for customization.
+
+Start tracking your miles and expenses today for better organization and tax preparedness!
 
 # Trip Logs
 
@@ -54,4 +59,22 @@ Your privacy is a top priority. Here's how your data is handled:
 
 By using Trip Logs, you agree that you are responsible for the accuracy of the data you enter. The calculations provided by the app are for informational purposes and should be verified with a professional tax advisor. The developers of Trip Logs are not liable for any financial decisions or tax filings made based on the information provided by this application.
 
-### © 2025 Trip Logs. All rights reserved.
+### © 2025 Trip Logs by Heriberto Perez Huertas. All rights reserved.
+
+# Importing and Using in Firebase Studio
+
+Firebase Studio provides a convenient environment to work with this project. Follow these steps to import and get started:
+
+1.  **Clone or Download the Project:** Obtain the project files by cloning the repository or downloading the project archive.
+2.  **Open Firebase Studio:** Launch Firebase Studio on your local machine.
+3.  **Import Project:**
+    *   Click on "File" in the menu bar.
+    *   Select "Import Project."
+    *   Browse to the location where you saved the project files.
+    *   Select the project folder and click "Open."
+4.  **Install Dependencies:** Firebase Studio should automatically detect the `package.json` file and prompt you to install dependencies. Confirm the installation.
+5.  **Run the Application:** Once dependencies are installed, you can run the application directly within Firebase Studio. Look for a "Run" or "Start" button, often associated with development scripts defined in `package.json`.
+6.  **Start Developing:** You can now explore the project files, make modifications, and utilize Firebase Studio's features for development, debugging, and deployment.
+
+
+
