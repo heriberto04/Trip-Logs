@@ -1,14 +1,5 @@
 # Trip Logs
 
-1.  **Access the Application:** If you're using the web version, simply open the application in your browser.
-2.  **Create Your First Vehicle Profile:** Navigate to the "Vehicles" section (or similar) and add details about your vehicle, including its starting odometer reading.
-3.  **Log Your First Trip:** Go to the "Trips" section and enter the details of your trip, including start and end points, distance, earnings, and any associated expenses.
-4.  **Explore Features:** Familiarize yourself with the other sections like "Summary" for data overviews, "History" for past trips, and "Settings" for customization.
-
-Start tracking your miles and expenses today for better organization and tax preparedness!
-
-# Trip Logs
-
 **Your all-in-one solution for managing vehicle trips and expenses.**
 
 Trip Logs is a powerful web app designed for efficient trip management, mileage tracking, and expense logging. It's an essential tool for anyone who drives for work, especially independent contractors and drivers using popular platforms.
@@ -76,5 +67,12 @@ Firebase Studio provides a convenient environment to work with this project. Fol
 5.  **Run the Application:** Once dependencies are installed, you can run the application directly within Firebase Studio. Look for a "Run" or "Start" button, often associated with development scripts defined in `package.json`.
 6.  **Start Developing:** You can now explore the project files, make modifications, and utilize Firebase Studio's features for development, debugging, and deployment.
 
+# How To Use (Once published in your Firebase Studio)
 
+1.  **Access the Application:** If you're using the web version, simply open the application in your browser using the provided URL by Firebase Studio.
+2.  **Create Your First Vehicle Profile:** Navigate to the "Vehicles" section (or similar) and add details about your vehicle, including its starting odometer reading.
+3.  **Log Your First Trip:** Go to the "Trips" section and enter the details of your trip, including start and end points, distance, earnings, and any associated expenses.
+4.  **Explore Features:** Familiarize yourself with the other sections like "Summary" for data overviews, "History" for past trips, and "Settings" for customization.
+
+Start tracking your miles and expenses today for better organization and tax preparedness!
 
