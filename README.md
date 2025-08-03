@@ -1,20 +1,54 @@
-## Firebase Studio
+# Get Started
 
-This is a NextJS starter in Firebase Studio.
+To get started, go to https://studio--trip-logs-j39tq.us-central1.hosted.app/trips
 
-To get started, take a look at src/app/page.tsx.
+# Trip Logs
 
-# Trip Logs: 
+**Your all-in-one solution for managing vehicle trips and expenses.**
 
-Your all-in-one solution for managing vehicle trips and expenses. This web app offers comprehensive features including detailed trip logging with earnings and expense tracking (gas, tolls, food), automatic data summarization with flexible filtering (7-day, 30-day, yearly), organized historical trip data, user and vehicle information management, and a PDF tax report generator. Customize settings for preferred units (miles/kilometers), currency, and tax deduction rates. Streamline your vehicle log management and financial tracking with Trip Logs.
+Trip Logs is a powerful web app designed for efficient trip management, mileage tracking, and expense logging. It's an essential tool for anyone who drives for work, especially independent contractors and drivers using popular platforms.
+
+## Why Use Trip Logs?
+
+*   **Maximize Tax Deductions:** Accurately track mileage and expenses to ensure you're claiming all eligible deductions.
+*   **Streamline Record Keeping:** Keep all your trip and vehicle information organized in one place.
+*   **Gain Financial Insight:** Understand your earnings and expenses to improve profitability.
+
+## Key Features:
+
+*   **Detailed Trip Logging:** Record trips with comprehensive details including earnings and expenses (gas, tolls, food).
+*   **Automatic Data Summarization:** Get instant, filterable summaries (7-day, 30-day, yearly) of your trip data.
+*   **Organized Historical Data:** Access and review your past trips easily.
+*   **User and Vehicle Management:** Manage your personal information and multiple vehicles.
+*   **PDF Tax Report Generator:** Generate professional reports for tax purposes.
+*   **Customizable Settings:** Personalize units (miles/kilometers), currency, and tax deduction rates.
+
+## Perfect for Drivers of:
+
+*   **Uber Driver**
+*   **Lyft Driver**
+*   **DoorDash (Dasher)**
+*   **Instacart (Shopper)**
+*   **Grubhub (Driver)**
+*   **Postmates**
+*   **Amazon Flex**
+*   **Shipt**
+*   **Roadie**
+*   **Spark Driver (Walmart)**
+*   And other driving/delivery services!
 
 # Privacy Statement
+Your privacy is a top priority. Here's how your data is handled:
 
-## The Good! 
-Your privacy is our utmost priority. All the information you enter into Trip Logs, including your personal details, vehicle information, odometer updates, and trip logs, is stored exclusively on your local device. We do not have access to your data, and it is never transmitted to any external servers. You are in complete control of your information at all times.
-
-## The Bad!
-All the data is stored localy in your browser or app. We are not responsible for any data loss if you clear your browser data, switch browsers, or delete the app.
+*   **Local Storage:** All your information (personal details, vehicles, odometer updates, trip logs) is stored *exclusively* on your local device (within your browser or app).
+*   **No External Servers:** Your data is never transmitted to external servers, and we do not have access to it. You are in complete control.
+*   **Export/Import Functionality:** You can now export your data to transfer it between devices or browsers.
+*   **User Responsibility for Data Loss:** While export is available, **we are not responsible for any data loss** due to:
+    *   Clearing browser data
+    *   Switching browsers
+    *   Deleting the app
+    *   Issues with exported files
+*   **Recommendation:** We highly recommend regularly exporting backups of your data to prevent loss.
 
 # User Agreement
 
