@@ -1,17 +1,16 @@
 {
-  "name": "Trip Logs",
-  "short_name": "Trip Logs",
-  "description": "An application to track trips and expenses for tax purposes.",
+  "name": "DriveTrack Pro",
+  "short_name": "DriveTrack Pro",
+  "description": "Log and manage your driving trips for tax purposes.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#181818",
+  "theme_color": "#C80000",
   "icons": [
     {
       "src": "/icon.png",
       "sizes": "512x512",
       "type": "image/png"
     }
-  ],
-  "theme_color": "#000000",
-  "background_color": "#000000",
-  "start_url": "/trips",
-  "display": "standalone",
-  "orientation": "portrait"
+  ]
 }
