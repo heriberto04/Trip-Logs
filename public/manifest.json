@@ -1,6 +1,6 @@
 {
-  "name": "DriveTrack Pro",
-  "short_name": "DriveTrack Pro",
+  "name": "Trip Logs",
+  "short_name": "Trip Logs",
   "description": "Log and manage your driving trips for tax purposes.",
   "start_url": "/",
   "display": "standalone",
