@@ -11,6 +11,7 @@ export const metadata: Metadata = {
     statusBarStyle: 'black-translucent',
     title: 'Trip Logs',
   },
+  manifest: '/manifest.json',
 };
 
 export default function RootLayout({
@@ -27,7 +28,6 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Code+Pro&display=swap"
           rel="stylesheet"
         />
-        <link rel="preload" href="/icon.png" as="image" />
         <link rel="icon" href="/icon.png" sizes="any" />
         <link rel="apple-touch-icon" href="/icon.png" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
