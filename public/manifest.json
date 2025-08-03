@@ -1,6 +1,7 @@
 {
   "name": "Trip Logs",
   "short_name": "TripLogs",
+  "description": "A comprehensive yet intuitive application designed for drivers who need to meticulously track their trips for business and tax purposes.",
   "icons": [
     {
       "src": "/icon.png",
@@ -8,9 +9,9 @@
       "type": "image/png"
     }
   ],
-  "theme_color": "#000000",
-  "background_color": "#000000",
+  "theme_color": "#181818",
+  "background_color": "#181818",
   "display": "standalone",
   "scope": "/",
-  "start_url": "/trips"
+  "start_url": "/"
 }
