@@ -12,6 +12,7 @@ export const metadata: Metadata = {
     statusBarStyle: 'black-translucent',
     title: 'Trip Logs',
   },
+  themeColor: '#000000'
 };
 
 export default function RootLayout({
