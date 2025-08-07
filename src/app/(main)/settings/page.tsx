@@ -58,11 +58,20 @@ export default function SettingsPage() {
       });
       return;
     }
-    await generatePdf(userInfo, yearTrips, yearOdometerReadings, settings, vehicles, exportYear);
-    toast({
-        title: "PDF Exported",
-        description: `Your report for ${exportYear} has been generated.`,
-    });
+    const result = await generatePdf(userInfo, yearTrips, yearOdometerReadings, settings, vehicles, exportYear);
+    
+    if (result.success) {
+        toast({
+            title: "PDF Exported",
+            description: `Your report for ${exportYear} has been generated.`,
+        });
+    } else {
+        toast({
+            variant: "destructive",
+            title: "Export Failed",
+            description: result.error || "Could not generate the PDF.",
+        });
+    }
   };
 
   const handleExportAllData = async () => {
@@ -180,7 +189,7 @@ export default function SettingsPage() {
   return (
     <div className="container mx-auto p-4 flex flex-col gap-4">
       
-      <Accordion type="multiple" className="w-full space-y-4">
+      <Accordion type="multiple" className="w-full space-y-4" defaultValue={['user-info']}>
         {/* User Information */}
         <AccordionItem value="user-info" className="border-b-0">
           <AccordionTrigger className="text-xl font-semibold p-4 bg-card rounded-lg">User Information</AccordionTrigger>
