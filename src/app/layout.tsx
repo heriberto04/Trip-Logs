@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import { AppProviders } from '@/contexts/app-provider';
-import { Toaster } from '@/components/ui/toaster';
+import { AppProviders } from '@/contexts/app-provider';import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
   title: 'Trip Logs',
@@ -36,6 +35,22 @@ export default function RootLayout({
         <AppProviders>{children}</AppProviders>
         <Toaster />
       </body>
+      {/* Register service worker */}
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `
+            if ('serviceWorker' in navigator) {
+              window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
+                  console.log('Service Worker registered with scope: ', registration.scope);
+                }, function(err) {
+                  console.log('Service Worker registration failed: ', err);
+                });
+              });
+            }
+          `,
+        }}
+      />
     </html>
   );
 }
