@@ -8,6 +8,7 @@ import { SettingsProvider, useSettings } from './settings-context';
 import { UserInfoProvider, useUserInfo } from './user-info-context';
 import Image from 'next/image';
 import { OdometerProvider, useOdometer } from './odometer-context';
+import { Toaster } from '@/components/ui/toaster';
 
 const AppLoadingContext = createContext<{ isReady: boolean }>({ isReady: false });
 
@@ -45,7 +46,7 @@ function AppStateGate({ children }: { children: React.ReactNode }) {
     useEffect(() => {
         if ('serviceWorker' in navigator) {
           window.addEventListener('load', function() {
-            navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
+            navigator.serviceWorker.register('/sw.js').then(function(registration) {
               console.log('Service Worker registered with scope: ', registration.scope);
             }, function(err) {
               console.log('Service Worker registration failed: ', err);
@@ -59,7 +60,12 @@ function AppStateGate({ children }: { children: React.ReactNode }) {
         return <LoadingScreen />;
     }
 
-    return <>{children}</>;
+    return (
+        <>
+            {children}
+            <Toaster />
+        </>
+    );
 }
 
 

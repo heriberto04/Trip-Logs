@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import { AppProviders } from '@/contexts/app-provider';import { Toaster } from '@/components/ui/toaster';
+import { AppProviders } from '@/contexts/app-provider';
 
 export const metadata: Metadata = {
   title: 'Trip Logs',
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     statusBarStyle: 'black-translucent',
     title: 'Trip Logs',
   },
-  themeColor: '#000000'
+  themeColor: '#181818'
 };
 
 export default function RootLayout({
@@ -33,7 +33,6 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased">
         <AppProviders>{children}</AppProviders>
-        <Toaster />
       </body>
     </html>
   );
