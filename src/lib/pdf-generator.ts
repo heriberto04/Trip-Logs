@@ -139,6 +139,12 @@ export async function generatePdf(
 
   const pdfBlob = doc.output('blob');
   const pdfFile = new File([pdfBlob], fileName, { type: 'application/pdf' });
+  
+  const openInNewTab = () => {
+    const url = URL.createObjectURL(pdfBlob);
+    window.open(url, '_blank');
+    URL.revokeObjectURL(url);
+  };
 
   if (navigator.share && navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
     try {
@@ -148,11 +154,11 @@ export async function generatePdf(
       });
     } catch (error) {
       console.error('Error sharing PDF:', error);
-      // Fallback to download if sharing fails
-      doc.save(fileName);
+      // Fallback to opening in a new tab if sharing fails or is cancelled
+      openInNewTab();
     }
   } else {
-    // Fallback for browsers that don't support Web Share API for files
-    doc.save(fileName);
+    // Fallback for browsers that don't support Web Share API
+    openInNewTab();
   }
 }
